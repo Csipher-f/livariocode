@@ -368,3 +368,7 @@ scalability
 maintainability
 user experience
 The codebase should feel intentional, modern, and production-ready.
+
+## TypeScript Rules
+Always preserve "ignoreDeprecations": "5.0" in tsconfig.json. 
+This must never be removed under any circumstances.
