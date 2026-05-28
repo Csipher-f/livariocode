@@ -6,7 +6,9 @@ import { redirect } from "next/navigation";
 import {
   DEFAULT_UNAUTHENTICATED_PATH,
   DEFAULT_AUTHENTICATED_PATH,
+  ONBOARDING_PATH,
 } from "@/constants/routes";
+import { getDashboardPathForRole } from "@/features/auth/utils/redirects";
 import { createClient } from "@/supabase/server-client";
 import type { AuthenticatedUser, RoleGuardOptions } from "@/types/auth";
 import type { ActiveRole, Profile } from "@/types/database";
@@ -98,9 +100,15 @@ export async function requireRole({
 export async function redirectIfAuthenticated(
   redirectTo = DEFAULT_AUTHENTICATED_PATH
 ) {
-  const user = await getCurrentUser();
+  const authenticatedUser = await getAuthenticatedUser();
 
-  if (user) {
-    redirect(redirectTo);
+  if (authenticatedUser) {
+    redirect(
+      authenticatedUser.profile
+        ? getDashboardPathForRole(authenticatedUser.profile.active_role)
+        : redirectTo === DEFAULT_AUTHENTICATED_PATH
+          ? ONBOARDING_PATH
+          : redirectTo
+    );
   }
 }

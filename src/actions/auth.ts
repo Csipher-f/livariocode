@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { ONBOARDING_PATH } from "@/constants/routes";
+import { getDashboardPathForRole } from "@/features/auth/utils/redirects";
 import {
   forgotPasswordSchema,
   loginSchema,
@@ -17,6 +18,24 @@ import type { AuthActionState } from "@/types/auth";
 
 const GENERIC_AUTH_ERROR =
   "We could not complete that request. Please try again.";
+
+function getFriendlyAuthErrorMessage(message?: string) {
+  if (!message) {
+    return GENERIC_AUTH_ERROR;
+  }
+
+  const normalizedMessage = message.toLowerCase();
+
+  if (normalizedMessage.includes("already")) {
+    return "An account may already exist for this email. Try logging in instead.";
+  }
+
+  if (normalizedMessage.includes("password")) {
+    return "Please choose a stronger password and try again.";
+  }
+
+  return GENERIC_AUTH_ERROR;
+}
 
 function validationError(errors: Record<string, string[]>): AuthActionState {
   return {
@@ -64,7 +83,7 @@ export async function signup(
   if (error) {
     return {
       success: false,
-      message: error.message || GENERIC_AUTH_ERROR,
+      message: getFriendlyAuthErrorMessage(error.message),
     };
   }
 
@@ -102,7 +121,7 @@ export async function login(
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword(parsed.data);
+  const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
 
   if (error) {
     return {
@@ -111,10 +130,15 @@ export async function login(
     };
   }
 
-  return {
-    success: true,
-    message: "Signed in successfully.",
-  };
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("active_role")
+    .eq("id", data.user.id)
+    .maybeSingle();
+
+  redirect(
+    profile ? getDashboardPathForRole(profile.active_role) : ONBOARDING_PATH
+  );
 }
 
 export async function logout(): Promise<AuthActionState> {
@@ -174,6 +198,7 @@ export async function resetPassword(
 ): Promise<AuthActionState> {
   const parsed = resetPasswordSchema.safeParse({
     password: getFormString(formData, "password"),
+    confirmPassword: getFormString(formData, "confirmPassword"),
   });
 
   if (!parsed.success) {
@@ -192,8 +217,5 @@ export async function resetPassword(
     };
   }
 
-  return {
-    success: true,
-    message: "Password updated successfully.",
-  };
+  redirect("/login?message=password-updated");
 }

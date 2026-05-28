@@ -21,9 +21,15 @@ export const forgotPasswordSchema = z.object({
   email: z.email("Please enter a valid email address.").trim().toLowerCase(),
 });
 
-export const resetPasswordSchema = z.object({
-  password: passwordSchema,
-});
+export const resetPasswordSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: z.string().min(1, "Please confirm your new password."),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "The passwords do not match yet.",
+    path: ["confirmPassword"],
+  });
 
 export const onboardingRoleSchema = z.object({
   activeRole: z.enum(ACTIVE_ROLES),

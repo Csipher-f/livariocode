@@ -3,10 +3,11 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import {
   AUTH_ROUTES,
-  DEFAULT_AUTHENTICATED_PATH,
   DEFAULT_UNAUTHENTICATED_PATH,
+  ONBOARDING_PATH,
   PROTECTED_ROUTES,
 } from "@/constants/routes";
+import { getDashboardPathForRole } from "@/features/auth/utils/redirects";
 import { getSupabaseEnv } from "@/supabase/env";
 import type { Database } from "@/types/database";
 
@@ -65,8 +66,19 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (isAuthRoute && user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("active_role")
+      .eq("id", user.id)
+      .maybeSingle();
+
     return NextResponse.redirect(
-      new URL(DEFAULT_AUTHENTICATED_PATH, request.url)
+      new URL(
+        profile
+          ? getDashboardPathForRole(profile.active_role)
+          : ONBOARDING_PATH,
+        request.url
+      )
     );
   }
 
