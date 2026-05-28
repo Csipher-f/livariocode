@@ -264,6 +264,23 @@ Use:
 - clean mobile menus
 - minimal top navigation clutter
 
+Onboarding should feel calm and decisive.
+
+The first onboarding screen after signup should ask:
+
+"How would you like to use Livario?"
+
+It should present two clear actions:
+
+- Continue as Tenant
+- Continue as Landlord
+
+Include the note:
+
+"You can switch this later in Settings"
+
+The experience should be minimal, centered, mobile-first, and avoid explaining future role complexity.
+
 ---
 
 Desktop Navigation

@@ -274,12 +274,24 @@ Examples:
 Authentication Philosophy
 Authentication architecture must:
 scale cleanly
-support future landlord/tenant roles
+support tenant and landlord capabilities on the same user
 avoid hydration issues
 support protected routes
 support persistent sessions
 separate client/server responsibilities properly
 Auth should feel invisible and reliable.
+
+Role Architecture
+Profiles must use dual-role capability flags:
+is_tenant defaults to true
+is_landlord defaults to false
+active_role tracks tenant or landlord mode
+A user can activate both tenant and landlord roles simultaneously.
+Do not use one locked role field for tenant vs landlord.
+After signup, users go to onboarding and choose:
+"Continue as Tenant" or "Continue as Landlord"
+Show the note:
+"You can switch this later in Settings"
 
 Performance Standards
 Prioritize:

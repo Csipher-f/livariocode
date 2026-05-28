@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { DEFAULT_USER_ROLE, USER_ROLES } from "@/constants/user-roles";
+import { ACTIVE_ROLES } from "@/constants/user-roles";
 
 const passwordSchema = z
   .string()
@@ -10,7 +10,6 @@ export const signupSchema = z.object({
   email: z.email("Please enter a valid email address.").trim().toLowerCase(),
   password: passwordSchema,
   fullName: z.string().trim().min(2, "Name must be at least 2 characters."),
-  role: z.enum(USER_ROLES).default(DEFAULT_USER_ROLE),
 });
 
 export const loginSchema = z.object({
@@ -24,4 +23,8 @@ export const forgotPasswordSchema = z.object({
 
 export const resetPasswordSchema = z.object({
   password: passwordSchema,
+});
+
+export const onboardingRoleSchema = z.object({
+  activeRole: z.enum(ACTIVE_ROLES),
 });

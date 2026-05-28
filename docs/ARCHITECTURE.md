@@ -175,7 +175,15 @@ Examples:
 
 - property types
 - navigation links
-- role constants
+- role mode constants
+
+Role constants must reflect Livario's dual-role profile model:
+
+- is_tenant boolean
+- is_landlord boolean
+- active_role: tenant or landlord
+
+Do not model tenant and landlord as one locked role field.
 
 ---
 

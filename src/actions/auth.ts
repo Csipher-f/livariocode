@@ -1,7 +1,9 @@
 "use server";
 
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
+import { ONBOARDING_PATH } from "@/constants/routes";
 import {
   forgotPasswordSchema,
   loginSchema,
@@ -39,7 +41,6 @@ export async function signup(
     email: getFormString(formData, "email"),
     password: getFormString(formData, "password"),
     fullName: getFormString(formData, "fullName"),
-    role: getFormString(formData, "role") || undefined,
   });
 
   if (!parsed.success) {
@@ -48,16 +49,15 @@ export async function signup(
 
   const origin = await getRequestOrigin();
   const supabase = await createClient();
-  const { email, password, fullName, role } = parsed.data;
+  const { email, password, fullName } = parsed.data;
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: {
         full_name: fullName,
-        role,
       },
-      emailRedirectTo: `${origin}/auth/callback?next=/dashboard`,
+      emailRedirectTo: `${origin}/auth/callback?next=${ONBOARDING_PATH}`,
     },
   });
 
@@ -73,13 +73,18 @@ export async function signup(
       id: data.user.id,
       email: data.user.email,
       fullName,
-      role,
     });
+  }
+
+  if (data.session) {
+    redirect(ONBOARDING_PATH);
   }
 
   return {
     success: true,
-    message: "Account created. Check your email if confirmation is required.",
+    message:
+      "Account created. Check your email if confirmation is required, then continue onboarding.",
+    redirectTo: ONBOARDING_PATH,
   };
 }
 

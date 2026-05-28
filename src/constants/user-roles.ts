@@ -1,3 +1,3 @@
-export const USER_ROLES = ["tenant", "landlord", "admin"] as const;
+export const ACTIVE_ROLES = ["tenant", "landlord"] as const;
 
-export const DEFAULT_USER_ROLE = "tenant";
+export const DEFAULT_ACTIVE_ROLE = "tenant";

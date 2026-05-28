@@ -148,7 +148,8 @@ Connected to Supabase auth users.
 Responsibilities
 
 - display name
-- user role
+- tenant and landlord capability flags
+- current active product mode
 - avatar
 - onboarding data later
 - account metadata
@@ -160,26 +161,51 @@ Important Fields
 id
 email
 full_name
-role
+is_tenant
+is_landlord
+active_role
 avatar_url
 created_at
 updated_at
 
 ---
 
-Role Types
+Role Architecture
+
+Profiles do not use one locked role field.
+
+Users can have both tenant and landlord capabilities enabled at the same time.
+
+Fields:
+
+is_tenant
+
+Boolean. Defaults to true.
+
+is_landlord
+
+Boolean. Defaults to false.
+
+active_role
+
+Tracks the current mode and must be either:
 
 tenant
 
-Default role.
+Tenant browsing mode.
 
 landlord
 
-Property owner role.
+Landlord management mode.
 
-admin
+Rules:
 
-Future internal role.
+- signup creates a profile with is_tenant true and is_landlord false
+- onboarding sets the initial active role
+- choosing landlord sets is_landlord true and active_role landlord
+- users may later enable both roles from Settings
+- active_role must match an enabled capability
+- admin access should be modeled separately later, not as a user-facing active role
 
 ---
 
@@ -394,6 +420,8 @@ RLS is mandatory.
 
 Never rely solely on frontend authorization.
 
+Policies should respect both ownership and active role where the action depends on product mode.
+
 ---
 
 Ownership Rules
@@ -415,6 +443,8 @@ Landlords can:
 - edit own listings
 - delete own listings
 
+Property mutations require owner_id = auth.uid(), is_landlord = true, and active_role = landlord.
+
 Public users can:
 
 - view published listings
@@ -434,6 +464,8 @@ Inquiries
 Users can:
 
 - view only conversations involving themselves
+
+Tenant inquiry creation requires sender_id = auth.uid(), is_tenant = true, and active_role = tenant.
 
 ---
 

@@ -1,6 +1,6 @@
 import type { User } from "@supabase/supabase-js";
 
-import type { Profile, UserRole } from "@/types/database";
+import type { ActiveRole, Profile } from "@/types/database";
 
 export type AuthUser = User;
 
@@ -13,11 +13,12 @@ export type AuthActionState = {
   success: boolean;
   message: string;
   errors?: Record<string, string[]>;
+  redirectTo?: string;
 };
 
 export type AuthRouteIntent = "public" | "auth" | "protected";
 
 export type RoleGuardOptions = {
-  allowedRoles?: UserRole[];
+  allowedRoles?: ActiveRole[];
   redirectTo?: string;
 };

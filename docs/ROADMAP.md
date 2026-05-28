@@ -162,8 +162,8 @@ User System
 
 - user profiles
 - avatar support
-- onboarding preparation
-- role-ready architecture
+- onboarding role selection after signup
+- dual-role-ready architecture
 
 Security
 
@@ -290,6 +290,8 @@ Users
 - auth users
 - profiles
 - preferences
+- dual role capability flags
+- active role mode
 
 Properties
 
@@ -326,6 +328,7 @@ Security
 
 - Row Level Security
 - ownership policies
+- active-role-aware policies
 - secure queries
 - upload permissions
 

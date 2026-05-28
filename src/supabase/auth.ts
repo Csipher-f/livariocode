@@ -9,7 +9,7 @@ import {
 } from "@/constants/routes";
 import { createClient } from "@/supabase/server-client";
 import type { AuthenticatedUser, RoleGuardOptions } from "@/types/auth";
-import type { Profile, UserRole } from "@/types/database";
+import type { ActiveRole, Profile } from "@/types/database";
 
 export const getCurrentUser = cache(async () => {
   const supabase = await createClient();
@@ -35,7 +35,9 @@ export const getCurrentProfile = cache(async (): Promise<Profile | null> => {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("profiles")
-    .select("id,email,full_name,role,avatar_url,created_at,updated_at")
+    .select(
+      "id,email,full_name,is_tenant,is_landlord,active_role,avatar_url,created_at,updated_at"
+    )
     .eq("id", user.id)
     .maybeSingle();
 
@@ -82,7 +84,7 @@ export async function requireRole({
 
   if (
     allowedRoles?.length &&
-    !allowedRoles.includes(profile?.role as UserRole)
+    !allowedRoles.includes(profile?.active_role as ActiveRole)
   ) {
     redirect(DEFAULT_AUTHENTICATED_PATH);
   }

@@ -49,7 +49,7 @@ The authentication system must:
 - avoid hydration issues
 - work correctly with Server Components
 - support protected routes
-- support future role expansion
+- support dual tenant/landlord role capabilities
 - maintain security best practices
 - avoid duplicated auth logic
 - remain simple and maintainable
@@ -78,7 +78,7 @@ User Profiles
 
 - profile creation
 - avatar support later
-- onboarding support later
+- onboarding role selection after signup
 
 Route Protection
 
@@ -258,7 +258,7 @@ Initial Roles
 
 Tenant
 
-Default user type.
+Default capability.
 
 Can:
 
@@ -270,7 +270,7 @@ Can:
 
 Landlord
 
-Property owner role.
+Optional property owner capability.
 
 Can:
 
@@ -282,11 +282,30 @@ Can:
 
 Role Architecture Philosophy
 
-Even if roles are simple initially:
+Profiles must support dual roles:
 
-- architecture must remain expandable
+- is_tenant defaults to true
+- is_landlord defaults to false
+- active_role tracks current mode: tenant or landlord
+- users can activate both tenant and landlord capabilities at the same time
+- active_role must always match an enabled capability
 - permissions should remain centralized
 - avoid hardcoded scattered role checks
+
+After signup, authenticated users should be taken to onboarding.
+
+Onboarding asks:
+
+"How would you like to use Livario?"
+
+Actions:
+
+- Continue as Tenant
+- Continue as Landlord
+
+Supporting note:
+
+"You can switch this later in Settings"
 
 ---
 
@@ -307,7 +326,9 @@ Profiles Table
 Stores:
 
 - display name
-- role
+- is_tenant
+- is_landlord
+- active_role
 - avatar
 - preferences
 - metadata
@@ -326,6 +347,7 @@ Public Routes
 
 Protected Routes
 
+/onboarding
 /dashboard
 /dashboard/properties
 /dashboard/saved
