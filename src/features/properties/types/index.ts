@@ -69,6 +69,46 @@ export type PropertyDetail = {
   };
 };
 
+export type LandlordPropertyImage = {
+  id: string;
+  imageUrl: string;
+  storagePath: string;
+  isPrimary: boolean;
+  displayOrder: number;
+};
+
+export type LandlordProperty = {
+  id: string;
+  ownerId: string;
+  locationId: string | null;
+  title: string;
+  description: string | null;
+  price: number;
+  propertyType: string;
+  bedrooms: number | null;
+  bathrooms: number | null;
+  status: PropertyStatus;
+  createdAt: string;
+  updatedAt: string;
+  location: {
+    id: string;
+    address: string | null;
+    city: string;
+    state: string;
+    country: string;
+  } | null;
+  images: LandlordPropertyImage[];
+};
+
+export type LandlordPropertiesResult = {
+  properties: LandlordProperty[];
+  stats: {
+    totalListings: number;
+    publishedListings: number;
+    draftListings: number;
+  };
+};
+
 export type PaginatedProperties = {
   properties: PropertyListing[];
   page: number;
