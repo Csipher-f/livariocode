@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-label="Family house exterior illustration">
+  <rect width="960" height="720" fill="#f3f4f1"/>
+  <path d="M118 520h724v88H118z" fill="#bfd4ca"/>
+  <path d="M190 336 480 130l290 206v226H190z" fill="#ffffff"/>
+  <path d="M152 356 480 116l328 240" fill="none" stroke="#1f2933" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="416" y="420" width="128" height="142" rx="18" fill="#1f2933"/>
+  <rect x="260" y="386" width="104" height="82" rx="16" fill="#d9ebe7"/>
+  <rect x="596" y="386" width="104" height="82" rx="16" fill="#f0c8b1"/>
+</svg>

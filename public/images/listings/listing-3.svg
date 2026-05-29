@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-label="Self-contained room illustration">
+  <rect width="960" height="720" fill="#f7f3ec"/>
+  <rect x="120" y="110" width="720" height="500" rx="42" fill="#ffffff"/>
+  <rect x="190" y="190" width="230" height="310" rx="26" fill="#d8e8df"/>
+  <rect x="470" y="206" width="270" height="82" rx="20" fill="#1f2933"/>
+  <rect x="470" y="342" width="270" height="128" rx="24" fill="#efccb8"/>
+  <circle cx="660" cy="534" r="34" fill="#8bb3aa"/>
+</svg>

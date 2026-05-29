@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-label="City apartment building illustration">
+  <rect width="960" height="720" fill="#f6f3ef"/>
+  <rect x="176" y="112" width="608" height="496" rx="40" fill="#ffffff"/>
+  <rect x="244" y="180" width="116" height="104" rx="20" fill="#d3e5df"/>
+  <rect x="422" y="180" width="116" height="104" rx="20" fill="#d3e5df"/>
+  <rect x="600" y="180" width="116" height="104" rx="20" fill="#efc9b5"/>
+  <rect x="244" y="352" width="116" height="104" rx="20" fill="#efc9b5"/>
+  <rect x="422" y="352" width="116" height="180" rx="24" fill="#1f2933"/>
+  <rect x="600" y="352" width="116" height="104" rx="20" fill="#d3e5df"/>
+</svg>

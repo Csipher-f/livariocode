@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-label="Duplex exterior illustration">
+  <rect width="960" height="720" fill="#f2f6f4"/>
+  <rect x="148" y="156" width="664" height="416" rx="38" fill="#ffffff"/>
+  <rect x="204" y="220" width="160" height="120" rx="22" fill="#d4e8e2"/>
+  <rect x="420" y="220" width="160" height="120" rx="22" fill="#f0cbb8"/>
+  <rect x="636" y="220" width="96" height="292" rx="24" fill="#1f2933"/>
+  <rect x="204" y="408" width="376" height="104" rx="26" fill="#e8ecea"/>
+  <path d="M168 176h624" stroke="#1f2933" stroke-width="30" stroke-linecap="round"/>
+</svg>

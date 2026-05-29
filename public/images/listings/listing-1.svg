@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" role="img" aria-label="Modern apartment interior illustration">
+  <rect width="960" height="720" fill="#eef5f3"/>
+  <rect x="80" y="80" width="800" height="560" rx="48" fill="#ffffff"/>
+  <rect x="140" y="140" width="300" height="250" rx="24" fill="#d9ebe7"/>
+  <rect x="500" y="140" width="320" height="180" rx="24" fill="#f5d6c4"/>
+  <rect x="140" y="450" width="680" height="90" rx="24" fill="#1f2933"/>
+  <circle cx="710" cy="430" r="58" fill="#8fb9ae"/>
+  <rect x="560" y="370" width="98" height="118" rx="18" fill="#ffffff"/>
+</svg>
