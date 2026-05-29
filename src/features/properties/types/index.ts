@@ -34,6 +34,40 @@ export type PropertyListing = {
   primaryImageUrl: string | null;
 };
 
+export type PropertyDetailImage = {
+  id: string;
+  imageUrl: string;
+  isPrimary: boolean;
+  displayOrder: number;
+};
+
+export type PropertyDetail = {
+  id: string;
+  ownerId: string;
+  title: string;
+  description: string | null;
+  price: number;
+  propertyType: string;
+  bedrooms: number | null;
+  bathrooms: number | null;
+  status: PropertyStatus;
+  createdAt: string;
+  amenities: string[];
+  location: {
+    address: string | null;
+    city: string;
+    state: string;
+    country: string;
+  } | null;
+  images: PropertyDetailImage[];
+  landlord: {
+    id: string;
+    fullName: string | null;
+    avatarUrl: string | null;
+    createdAt: string | null;
+  };
+};
+
 export type PaginatedProperties = {
   properties: PropertyListing[];
   page: number;
