@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Bath, BedDouble, Heart, MapPin } from "lucide-react";
+import { Bath, BedDouble, MapPin } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { FavoriteButton } from "@/features/favorites/components/favorite-button";
 import type { PropertyListing } from "@/features/properties/types";
 import { formatPrice } from "@/features/properties/utils/format-price";
+import { getCurrentUser } from "@/supabase/auth";
 
 const fallbackImage = "/images/listings/listing-1.svg";
 
@@ -18,7 +19,12 @@ function isRemoteImage(imageUrl: string) {
   return imageUrl.startsWith("http://") || imageUrl.startsWith("https://");
 }
 
-export function PropertyCard({ property }: { property: PropertyListing }) {
+export async function PropertyCard({
+  property,
+}: {
+  property: PropertyListing;
+}) {
+  const user = await getCurrentUser();
   const imageSource = getImageSource(property.primaryImageUrl);
   const locationLabel = property.location
     ? `${property.location.city}, ${property.location.state}`
@@ -50,15 +56,12 @@ export function PropertyCard({ property }: { property: PropertyListing }) {
         >
           {property.propertyType}
         </Badge>
-        <Button
-          aria-label="Save listing"
+        <FavoriteButton
           className="absolute right-3 top-3 rounded-full bg-background/90 shadow-sm backdrop-blur hover:bg-background"
-          size="icon"
-          type="button"
-          variant="outline"
-        >
-          <Heart className="size-4" />
-        </Button>
+          initialIsFavorited={Boolean(property.isFavorited)}
+          isAuthenticated={Boolean(user)}
+          propertyId={property.id}
+        />
       </div>
       <CardContent className="p-4">
         <Link className="block" href={`/listings/${property.id}`}>

@@ -7,6 +7,7 @@ type EmptyStateProps = React.ComponentProps<"div"> & {
   icon?: LucideIcon;
   title: string;
   description?: string;
+  action?: React.ReactNode;
   actionLabel?: string;
   onAction?: () => void;
 };
@@ -15,6 +16,7 @@ function EmptyState({
   icon: Icon,
   title,
   description,
+  action,
   actionLabel,
   onAction,
   className,
@@ -47,6 +49,7 @@ function EmptyState({
           {actionLabel}
         </Button>
       ) : null}
+      {action ? action : null}
     </div>
   );
 }

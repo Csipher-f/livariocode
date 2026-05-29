@@ -1,5 +1,6 @@
 import "server-only";
 
+import { getCurrentUser } from "@/supabase/auth";
 import { createClient } from "@/supabase/server-client";
 import {
   PROPERTY_TYPES,
@@ -45,6 +46,10 @@ type PropertyQueryRow = {
   property_images: PropertyImageJoin[] | null;
 };
 
+type FavoritePropertyRow = {
+  property_id: string;
+};
+
 function getSingleParam(value: SearchParamValue) {
   return Array.isArray(value) ? value[0] : value;
 }
@@ -84,7 +89,10 @@ export function parsePropertyFilters(
   };
 }
 
-function mapPropertyRow(row: PropertyQueryRow): PropertyListing {
+function mapPropertyRow(
+  row: PropertyQueryRow,
+  favoritePropertyIds: Set<string>
+): PropertyListing {
   const primaryImage =
     row.property_images?.find((image) => image.is_primary)?.image_url ??
     row.property_images?.[0]?.image_url ??
@@ -105,6 +113,7 @@ function mapPropertyRow(row: PropertyQueryRow): PropertyListing {
         }
       : null,
     primaryImageUrl: primaryImage,
+    isFavorited: favoritePropertyIds.has(row.id),
   };
 }
 
@@ -112,6 +121,7 @@ export async function getPublishedProperties(
   filters: PropertyFilters
 ): Promise<PaginatedProperties> {
   const supabase = await createClient();
+  const user = await getCurrentUser();
   const start = (filters.page - 1) * LISTINGS_PAGE_SIZE;
   const end = start + LISTINGS_PAGE_SIZE - 1;
 
@@ -177,9 +187,25 @@ export async function getPublishedProperties(
 
   const rows = (data ?? []) as unknown as PropertyQueryRow[];
   const totalCount = count ?? 0;
+  const favoritePropertyIds = new Set<string>();
+
+  if (user && rows.length > 0) {
+    const { data: favorites } = await supabase
+      .from("favorites")
+      .select("property_id")
+      .eq("user_id", user.id)
+      .in(
+        "property_id",
+        rows.map((row) => row.id)
+      );
+
+    ((favorites ?? []) as FavoritePropertyRow[]).forEach((favorite) => {
+      favoritePropertyIds.add(favorite.property_id);
+    });
+  }
 
   return {
-    properties: rows.map(mapPropertyRow),
+    properties: rows.map((row) => mapPropertyRow(row, favoritePropertyIds)),
     page: filters.page,
     pageSize: LISTINGS_PAGE_SIZE,
     totalCount,

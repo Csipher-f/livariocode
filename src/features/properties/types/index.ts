@@ -32,6 +32,7 @@ export type PropertyListing = {
     state: string;
   } | null;
   primaryImageUrl: string | null;
+  isFavorited?: boolean;
 };
 
 export type PropertyDetailImage = {
