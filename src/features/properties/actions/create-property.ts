@@ -57,6 +57,7 @@ export async function createProperty(
     .single();
 
   if (locationError || !location) {
+    console.error("Location insert error:", locationError);
     return {
       success: false,
       message: "We could not save the property location.",
@@ -95,6 +96,7 @@ export async function createProperty(
     });
 
     if (uploadResult.error) {
+      console.error("Image upload error:", uploadResult.error);
       return {
         success: false,
         message: uploadResult.error,
@@ -106,6 +108,7 @@ export async function createProperty(
       .insert(uploadResult.imageRows);
 
     if (imageInsertError) {
+      console.error("Image insert error:", imageInsertError);
       return {
         success: false,
         message: "The listing was created, but images could not be attached.",

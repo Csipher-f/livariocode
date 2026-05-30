@@ -21,3 +21,9 @@ using (id = auth.uid())
 with check (id = auth.uid());
 
 GRANT SELECT, INSERT, UPDATE ON public.profiles TO authenticated;
+
+GRANT SELECT ON public.properties TO authenticated;
+
+GRANT SELECT, INSERT ON public.property_locations TO authenticated;
+
+GRANT SELECT, INSERT ON public.properties TO authenticated;
