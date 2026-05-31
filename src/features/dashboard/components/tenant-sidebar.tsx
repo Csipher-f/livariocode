@@ -1,11 +1,16 @@
 "use client";
 
-import { Heart, Search, Settings } from "lucide-react";
+import { Heart, Home, Inbox, Search, Settings } from "lucide-react";
 
 import { DashboardNav } from "@/features/dashboard/components/dashboard-nav";
 import type { Profile } from "@/types/database";
 
 const tenantItems = [
+  {
+    href: "/dashboard/tenant",
+    label: "Dashboard",
+    icon: Home,
+  },
   {
     href: "/listings",
     label: "Browse",
@@ -13,8 +18,13 @@ const tenantItems = [
   },
   {
     href: "/dashboard/tenant/saved",
-    label: "Saved",
+    label: "Saved Listings",
     icon: Heart,
+  },
+  {
+    href: "/dashboard/tenant/inquiries",
+    label: "Inquiries",
+    icon: Inbox,
   },
   {
     href: "/settings",
