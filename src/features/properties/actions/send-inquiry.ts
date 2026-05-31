@@ -3,7 +3,6 @@
 import { z } from "zod";
 
 import { createClient } from "@/supabase/server-client";
-import { getCurrentUser } from "@/supabase/auth";
 
 const inquirySchema = z.object({
   propertyId: z.string().uuid(),
@@ -30,9 +29,17 @@ export async function sendInquiry(input: {
   propertyId: string;
   message: string;
 }): Promise<SendInquiryState> {
-  const user = await getCurrentUser();
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (userError || !user) {
+    if (userError) {
+      console.error("Inquiry auth lookup failed", userError.message);
+    }
+
     return {
       success: false,
       message: "Please log in to contact this landlord.",
@@ -48,7 +55,28 @@ export async function sendInquiry(input: {
     };
   }
 
-  const supabase = await createClient();
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("id,is_tenant,active_role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (profileError) {
+    console.error("Inquiry profile lookup failed", profileError.message);
+
+    return {
+      success: false,
+      message: "We could not send your inquiry right now. Please try again.",
+    };
+  }
+
+  if (!profile?.is_tenant || profile.active_role !== "tenant") {
+    return {
+      success: false,
+      message: "Switch to tenant mode before contacting landlords.",
+    };
+  }
+
   const { data: property, error: propertyError } = await supabase
     .from("properties")
     .select("id,owner_id,status")
@@ -57,6 +85,10 @@ export async function sendInquiry(input: {
     .maybeSingle();
 
   if (propertyError || !property) {
+    if (propertyError) {
+      console.error("Inquiry property lookup failed", propertyError.message);
+    }
+
     return {
       success: false,
       message: "This listing is no longer available.",
@@ -81,6 +113,8 @@ export async function sendInquiry(input: {
   });
 
   if (inquiryError) {
+    console.error("Inquiry insert failed", inquiryError.message);
+
     return {
       success: false,
       message: "We could not send your inquiry right now. Please try again.",

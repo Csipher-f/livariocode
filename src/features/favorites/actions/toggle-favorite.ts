@@ -2,7 +2,6 @@
 
 import { z } from "zod";
 
-import { getCurrentUser } from "@/supabase/auth";
 import { createClient } from "@/supabase/server-client";
 
 const toggleFavoriteSchema = z.object({
@@ -24,9 +23,17 @@ export type ToggleFavoriteResult =
 export async function toggleFavorite(input: {
   propertyId: string;
 }): Promise<ToggleFavoriteResult> {
-  const user = await getCurrentUser();
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (userError || !user) {
+    if (userError) {
+      console.error("Favorite toggle auth lookup failed", userError.message);
+    }
+
     return {
       success: false,
       isFavorited: false,
@@ -44,7 +51,6 @@ export async function toggleFavorite(input: {
     };
   }
 
-  const supabase = await createClient();
   const { data: property, error: propertyError } = await supabase
     .from("properties")
     .select("id")
@@ -53,6 +59,13 @@ export async function toggleFavorite(input: {
     .maybeSingle();
 
   if (propertyError || !property) {
+    if (propertyError) {
+      console.error(
+        "Favorite toggle property lookup failed",
+        propertyError.message
+      );
+    }
+
     return {
       success: false,
       isFavorited: false,
@@ -68,6 +81,11 @@ export async function toggleFavorite(input: {
     .maybeSingle();
 
   if (favoriteLookupError) {
+    console.error(
+      "Favorite toggle favorite lookup failed",
+      favoriteLookupError.message
+    );
+
     return {
       success: false,
       isFavorited: false,
@@ -83,6 +101,8 @@ export async function toggleFavorite(input: {
       .eq("user_id", user.id);
 
     if (deleteError) {
+      console.error("Favorite toggle delete failed", deleteError.message);
+
       return {
         success: false,
         isFavorited: true,
@@ -103,6 +123,8 @@ export async function toggleFavorite(input: {
   });
 
   if (insertError) {
+    console.error("Favorite toggle insert failed", insertError.message);
+
     return {
       success: false,
       isFavorited: false,
