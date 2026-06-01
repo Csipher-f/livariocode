@@ -15,6 +15,9 @@ export type LandlordInquiry = {
   message: string;
   status: InquiryStatus;
   createdAt: string;
+  lastMessageContent: string;
+  lastActivityAt: string;
+  hasNewReplies: boolean;
 };
 
 type InquiryProfileJoin = {
@@ -26,18 +29,48 @@ type InquiryPropertyJoin = {
   title: string | null;
 };
 
+type ReplyRow = {
+  sender_id: string;
+  message: string;
+  created_at: string;
+};
+
 type InquiryRow = {
   id: string;
+  sender_id: string;
   message: string;
   status: InquiryStatus;
   created_at: string;
   profiles: InquiryProfileJoin | null;
   properties: InquiryPropertyJoin | null;
+  inquiry_replies: ReplyRow[] | null;
 };
 
 const inquiryIdSchema = z.string().uuid();
 
-function mapInquiry(row: InquiryRow): LandlordInquiry {
+function mapInquiry(row: InquiryRow, landlordId: string): LandlordInquiry {
+  const replies = row.inquiry_replies || [];
+  // Sort replies in chronological order
+  const sortedReplies = [...replies].sort(
+    (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+  );
+
+  const hasReplies = sortedReplies.length > 0;
+  const latestMessage = hasReplies
+    ? sortedReplies[sortedReplies.length - 1]
+    : null;
+
+  const lastMessageContent = latestMessage ? latestMessage.message : row.message;
+  const lastActivityAt = latestMessage ? latestMessage.created_at : row.created_at;
+
+  const lastSenderId = latestMessage ? latestMessage.sender_id : row.sender_id;
+
+  // Landlord has unread if the last message is from the tenant (not landlord)
+  // and status is pending or responded
+  const hasNewReplies =
+    lastSenderId !== landlordId &&
+    (row.status === "pending" || row.status === "responded");
+
   return {
     id: row.id,
     propertyTitle: row.properties?.title ?? "Untitled listing",
@@ -46,6 +79,9 @@ function mapInquiry(row: InquiryRow): LandlordInquiry {
     message: row.message,
     status: row.status,
     createdAt: row.created_at,
+    lastMessageContent,
+    lastActivityAt,
+    hasNewReplies,
   };
 }
 
@@ -62,11 +98,17 @@ export async function getReceivedInquiries({
     .select(
       `
         id,
+        sender_id,
         message,
         status,
         created_at,
         profiles!inquiries_sender_id_fkey(full_name,email),
-        properties(title)
+        properties(title),
+        inquiry_replies(
+          sender_id,
+          message,
+          created_at
+        )
       `
     )
     .eq("recipient_id", landlordId)
@@ -79,10 +121,13 @@ export async function getReceivedInquiries({
   const { data, error } = await query;
 
   if (error) {
+    console.error("Failed to fetch received inquiries", error.message);
     return [];
   }
 
-  return ((data ?? []) as unknown as InquiryRow[]).map(mapInquiry);
+  return ((data ?? []) as unknown as InquiryRow[]).map((row) =>
+    mapInquiry(row, landlordId)
+  );
 }
 
 export async function getReceivedInquiryCount(landlordId: string) {

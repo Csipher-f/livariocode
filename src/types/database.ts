@@ -74,6 +74,14 @@ export type Inquiry = {
   updated_at: string;
 };
 
+export type InquiryReply = {
+  id: string;
+  inquiry_id: string;
+  sender_id: string;
+  message: string;
+  created_at: string;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -200,6 +208,23 @@ export type Database = {
         Update: {
           status?: InquiryStatus;
           updated_at?: string;
+        };
+        Relationships: [];
+      };
+      inquiry_replies: {
+        Row: InquiryReply;
+        Insert: {
+          id?: string;
+          inquiry_id: string;
+          sender_id: string;
+          message: string;
+          created_at?: string;
+        };
+        Update: {
+          inquiry_id?: string;
+          sender_id?: string;
+          message?: string;
+          created_at?: string;
         };
         Relationships: [];
       };

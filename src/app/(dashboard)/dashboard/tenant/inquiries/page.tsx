@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, ChevronDown, Inbox, Search } from "lucide-react";
+import { Inbox, Search } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -85,17 +85,19 @@ export default async function TenantInquiriesPage() {
         <div className="grid gap-3">
           {inquiries.map((inquiry) => {
             const imageSource = getImageSource(inquiry.propertyThumbnailUrl);
+            const hasNew = inquiry.hasNewReplies;
 
             return (
-              <details
-                className="group rounded-md border border-border bg-card p-4 shadow-sm"
+              <Link
+                href={`/dashboard/tenant/inquiries/${inquiry.id}`}
+                className="group block rounded-md border border-border bg-card p-4 shadow-xs transition-all hover:border-foreground/15 hover:shadow-sm"
                 key={inquiry.id}
               >
-                <summary className="grid cursor-pointer list-none gap-4 sm:grid-cols-[88px_1fr] [&::-webkit-details-marker]:hidden">
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-secondary">
+                <div className="grid gap-4 sm:grid-cols-[88px_1fr]">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-md bg-secondary shrink-0">
                     <Image
                       alt=""
-                      className="object-cover"
+                      className="object-cover transition-transform group-hover:scale-105"
                       fill
                       sizes="88px"
                       src={imageSource}
@@ -103,43 +105,40 @@ export default async function TenantInquiriesPage() {
                     />
                   </div>
 
-                  <div className="min-w-0">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        <h2 className="truncate font-semibold tracking-tight">
-                          {inquiry.propertyTitle}
-                        </h2>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                          {dateFormatter.format(new Date(inquiry.createdAt))}
-                        </p>
+                  <div className="min-w-0 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h2 className="truncate font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
+                              {inquiry.propertyTitle}
+                            </h2>
+                            {hasNew && (
+                              <span className="size-2 rounded-full bg-primary shrink-0 animate-pulse" title="New replies" />
+                            )}
+                          </div>
+                          <p className="mt-0.5 text-xs text-muted-foreground">
+                            Active: {dateFormatter.format(new Date(inquiry.lastActivityAt))}
+                          </p>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                          <Badge variant={getStatusVariant(inquiry.status)}>
+                            {inquiry.status}
+                          </Badge>
+                          {hasNew && (
+                            <Badge variant="default" className="text-[10px] h-5 px-1.5 bg-primary/10 text-primary hover:bg-primary/15 border-transparent">
+                              New
+                            </Badge>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex shrink-0 items-center gap-2">
-                        <Badge variant={getStatusVariant(inquiry.status)}>
-                          {inquiry.status}
-                        </Badge>
-                        <ChevronDown
-                          className="size-4 text-muted-foreground transition-transform group-open:rotate-180"
-                        />
-                      </div>
+                      <p className="mt-2.5 line-clamp-2 text-sm leading-6 text-muted-foreground group-hover:text-muted-foreground/80 transition-colors">
+                        {inquiry.lastMessageContent}
+                      </p>
                     </div>
-                    <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted-foreground">
-                      {inquiry.message}
-                    </p>
                   </div>
-                </summary>
-
-                <div className="mt-4 border-t border-border pt-4 sm:ml-[104px]">
-                  <p className="whitespace-pre-line text-sm leading-7">
-                    {inquiry.message}
-                  </p>
-                  <Button asChild className="mt-4" size="sm" variant="outline">
-                    <Link href={`/listings/${inquiry.propertyId}`}>
-                      View property
-                      <ArrowRight className="size-4" />
-                    </Link>
-                  </Button>
                 </div>
-              </details>
+              </Link>
             );
           })}
         </div>

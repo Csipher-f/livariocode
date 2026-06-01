@@ -11,6 +11,9 @@ export type TenantInquiry = {
   message: string;
   status: InquiryStatus;
   createdAt: string;
+  lastMessageContent: string;
+  lastActivityAt: string;
+  hasNewReplies: boolean;
 };
 
 type TenantInquiryPropertyImageJoin = {
@@ -25,12 +28,20 @@ type TenantInquiryPropertyJoin = {
   property_images: TenantInquiryPropertyImageJoin[] | null;
 };
 
+type ReplyRow = {
+  sender_id: string;
+  message: string;
+  created_at: string;
+};
+
 type TenantInquiryRow = {
   id: string;
+  sender_id: string;
   message: string;
   status: InquiryStatus;
   created_at: string;
   properties: TenantInquiryPropertyJoin | null;
+  inquiry_replies: ReplyRow[] | null;
 };
 
 function getPrimaryImage(
@@ -43,10 +54,34 @@ function getPrimaryImage(
   );
 }
 
-function mapTenantInquiry(row: TenantInquiryRow): TenantInquiry | null {
+function mapTenantInquiry(
+  row: TenantInquiryRow,
+  tenantId: string
+): TenantInquiry | null {
   if (!row.properties) {
     return null;
   }
+
+  const replies = row.inquiry_replies || [];
+  // Sort replies in chronological order
+  const sortedReplies = [...replies].sort(
+    (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+  );
+
+  const hasReplies = sortedReplies.length > 0;
+  const latestMessage = hasReplies
+    ? sortedReplies[sortedReplies.length - 1]
+    : null;
+
+  const lastMessageContent = latestMessage ? latestMessage.message : row.message;
+  const lastActivityAt = latestMessage ? latestMessage.created_at : row.created_at;
+
+  const lastSenderId = latestMessage ? latestMessage.sender_id : row.sender_id;
+
+  // Tenant has unread if the last message is from the landlord (not tenant)
+  // and status is responded
+  const hasNewReplies =
+    lastSenderId !== tenantId && row.status === "responded";
 
   return {
     id: row.id,
@@ -56,6 +91,9 @@ function mapTenantInquiry(row: TenantInquiryRow): TenantInquiry | null {
     message: row.message,
     status: row.status,
     createdAt: row.created_at,
+    lastMessageContent,
+    lastActivityAt,
+    hasNewReplies,
   };
 }
 
@@ -72,6 +110,7 @@ export async function getTenantInquiries({
     .select(
       `
         id,
+        sender_id,
         message,
         status,
         created_at,
@@ -79,6 +118,11 @@ export async function getTenantInquiries({
           id,
           title,
           property_images(image_url,is_primary,display_order)
+        ),
+        inquiry_replies(
+          sender_id,
+          message,
+          created_at
         )
       `
     )
@@ -96,11 +140,12 @@ export async function getTenantInquiries({
   const { data, error } = await query;
 
   if (error) {
+    console.error("Failed to fetch tenant inquiries", error.message);
     return [];
   }
 
   return ((data ?? []) as unknown as TenantInquiryRow[]).flatMap((row) => {
-    const inquiry = mapTenantInquiry(row);
+    const inquiry = mapTenantInquiry(row, tenantId);
 
     return inquiry ? [inquiry] : [];
   });
