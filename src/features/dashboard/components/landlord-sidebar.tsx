@@ -1,11 +1,22 @@
 "use client";
 
-import { Building2, Home, Inbox, Settings } from "lucide-react";
+import {
+  Building2,
+  CreditCard,
+  FileText,
+  Home,
+  Inbox,
+  MessageCircle,
+  PlusCircle,
+  Settings,
+  User,
+  Users,
+} from "lucide-react";
 
 import { DashboardNav } from "@/features/dashboard/components/dashboard-nav";
 import type { Profile } from "@/types/database";
 
-const landlordItems = [
+const landlordActiveItems = [
   {
     href: "/dashboard/landlord",
     label: "Dashboard",
@@ -15,6 +26,11 @@ const landlordItems = [
     href: "/dashboard/landlord/properties",
     label: "My Properties",
     icon: Building2,
+  },
+  {
+    href: "/dashboard/landlord/properties/new",
+    label: "Add Listing",
+    icon: PlusCircle,
   },
   {
     href: "/dashboard/landlord/inquiries",
@@ -28,10 +44,58 @@ const landlordItems = [
   },
 ];
 
+const landlordBottomItems = [
+  {
+    href: "/dashboard/landlord",
+    label: "Dashboard",
+    icon: Home,
+  },
+  {
+    href: "/dashboard/landlord/properties",
+    label: "Properties",
+    icon: Building2,
+  },
+  {
+    href: "/dashboard/landlord/inquiries",
+    label: "Inquiries",
+    icon: Inbox,
+  },
+  {
+    href: "/settings",
+    label: "Profile",
+    icon: User,
+  },
+];
+
+const landlordComingSoonItems = [
+  {
+    label: "Applications",
+    icon: FileText,
+  },
+  {
+    label: "Tenants",
+    icon: Users,
+  },
+  {
+    label: "Payments",
+    icon: CreditCard,
+  },
+  {
+    label: "Complaints",
+    icon: Inbox,
+  },
+  {
+    label: "Messages",
+    icon: MessageCircle,
+  },
+];
+
 export function LandlordSidebar({ profile }: { profile: Profile }) {
   return (
     <DashboardNav
-      items={landlordItems}
+      activeItems={landlordActiveItems}
+      bottomItems={landlordBottomItems}
+      comingSoonItems={landlordComingSoonItems}
       profile={profile}
       title="Landlord dashboard"
     />
