@@ -1,7 +1,6 @@
 import "server-only";
 
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import { unstable_cache } from "next/cache";
 
 import { getCurrentUser } from "@/supabase/auth";
 import { getSupabaseEnv } from "@/supabase/env";
@@ -122,99 +121,77 @@ function mapPropertyRow(
   };
 }
 
-const getCachedPublishedPropertyRows = unstable_cache(
-  async (
-    filters: PropertyFilters
-  ): Promise<{
-    rows: PropertyQueryRow[];
-    totalCount: number;
-  }> => {
-    const { supabaseAnonKey, supabaseUrl } = getSupabaseEnv();
-    const supabase = createSupabaseClient<Database>(
-      supabaseUrl,
-      supabaseAnonKey
-    );
-    const start = (filters.page - 1) * LISTINGS_PAGE_SIZE;
-    const end = start + LISTINGS_PAGE_SIZE - 1;
-
-    let query = supabase
-      .from("properties")
-      .select(
-        `
-          id,
-          title,
-          price,
-          property_type,
-          bedrooms,
-          bathrooms,
-          status,
-          property_locations!inner(city,state),
-          property_images(image_url,is_primary,display_order)
-        `,
-        { count: "exact" }
-      )
-      .eq("status", "published")
-      .order("created_at", { ascending: false })
-      .order("display_order", {
-        ascending: true,
-        foreignTable: "property_images",
-      })
-      .range(start, end);
-
-    if (filters.city) {
-      query = query.ilike("property_locations.city", `%${filters.city}%`);
-    }
-
-    if (filters.type) {
-      query = query.eq("property_type", filters.type);
-    }
-
-    if (filters.bedrooms) {
-      if (filters.bedrooms >= 4) {
-        query = query.gte("bedrooms", 4);
-      } else {
-        query = query.eq("bedrooms", filters.bedrooms);
-      }
-    }
-
-    if (filters.minPrice) {
-      query = query.gte("price", filters.minPrice);
-    }
-
-    if (filters.maxPrice) {
-      query = query.lte("price", filters.maxPrice);
-    }
-
-    const { data, count, error } = await query;
-
-    if (error) {
-      return {
-        rows: [],
-        totalCount: 0,
-      };
-    }
-
-    return {
-      rows: (data ?? []) as unknown as PropertyQueryRow[],
-      totalCount: count ?? 0,
-    };
-  },
-  ["published-properties"],
-  {
-    revalidate: 60,
-  }
-);
-
 export async function getPublishedProperties(
   filters: PropertyFilters
 ): Promise<PaginatedProperties> {
-  const supabase = await createClient();
+  const { supabaseAnonKey, supabaseUrl } = getSupabaseEnv();
+  const supabase = createSupabaseClient<Database>(supabaseUrl, supabaseAnonKey);
+  const authClient = await createClient();
   const user = await getCurrentUser();
-  const { rows, totalCount } = await getCachedPublishedPropertyRows(filters);
+
+  const start = (filters.page - 1) * LISTINGS_PAGE_SIZE;
+  const end = start + LISTINGS_PAGE_SIZE - 1;
+
+  let query = supabase
+    .from("properties")
+    .select(
+      `
+        id,
+        title,
+        price,
+        property_type,
+        bedrooms,
+        bathrooms,
+        status,
+        property_locations!location_id(city,state),
+        property_images(image_url,is_primary,display_order)
+      `,
+      { count: "exact" }
+    )
+    .eq("status", "published")
+    .order("created_at", { ascending: false })
+    .order("display_order", {
+      ascending: true,
+      foreignTable: "property_images",
+    })
+    .range(start, end);
+
+  if (filters.city) {
+    query = query.ilike("property_locations.city", `%${filters.city}%`);
+  }
+
+  if (filters.type) {
+    query = query.eq("property_type", filters.type);
+  }
+
+  if (filters.bedrooms) {
+    if (filters.bedrooms >= 4) {
+      query = query.gte("bedrooms", 4);
+    } else {
+      query = query.eq("bedrooms", filters.bedrooms);
+    }
+  }
+
+  if (filters.minPrice) {
+    query = query.gte("price", filters.minPrice);
+  }
+
+  if (filters.maxPrice) {
+    query = query.lte("price", filters.maxPrice);
+  }
+
+  const { data, count, error } = await query;
+
+  if (error) {
+    console.error("Listings fetch error:", error);
+  }
+
+  const rows = (data ?? []) as unknown as PropertyQueryRow[];
+  const totalCount = count ?? 0;
   const favoritePropertyIds = new Set<string>();
 
   if (user && rows.length > 0) {
-    const { data: favorites } = await supabase
+    const { data: favorites } = await authClient
       .from("favorites")
       .select("property_id")
       .eq("user_id", user.id)
@@ -223,8 +200,8 @@ export async function getPublishedProperties(
         rows.map((row) => row.id)
       );
 
-    ((favorites ?? []) as FavoritePropertyRow[]).forEach((favorite) => {
-      favoritePropertyIds.add(favorite.property_id);
+    ((favorites ?? []) as FavoritePropertyRow[]).forEach((fav) => {
+      favoritePropertyIds.add(fav.property_id);
     });
   }
 
