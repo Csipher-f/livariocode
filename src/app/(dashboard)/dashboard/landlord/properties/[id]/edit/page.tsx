@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import { getLandlordPropertyById } from "@/features/properties/actions/get-landlord-properties";
-import { PropertyForm } from "@/features/properties/components/property-form";
 import { requireRole } from "@/supabase/auth";
 
 export const metadata: Metadata = {
@@ -15,6 +16,16 @@ type EditPropertyPageProps = {
     id: string;
   }>;
 };
+
+const PropertyForm = dynamic(
+  () =>
+    import("@/features/properties/components/property-form").then(
+      (module) => module.PropertyForm
+    ),
+  {
+    loading: () => <Skeleton className="h-[42rem] w-full rounded-md" />,
+  }
+);
 
 export default async function EditPropertyPage({
   params,

@@ -1,10 +1,13 @@
 import "server-only";
 
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { z } from "zod";
 
-import { createClient } from "@/supabase/server-client";
+import { getSupabaseEnv } from "@/supabase/env";
 import type { PropertyDetail } from "@/features/properties/types";
+import type { Database } from "@/types/database";
 
 const propertyIdSchema = z.string().uuid();
 
@@ -100,7 +103,17 @@ export const getPublishedPropertyById = cache(
       return null;
     }
 
-    const supabase = await createClient();
+    return getCachedPublishedPropertyById(parsedId.data);
+  }
+);
+
+const getCachedPublishedPropertyById = unstable_cache(
+  async (id: string): Promise<PropertyDetail | null> => {
+    const { supabaseAnonKey, supabaseUrl } = getSupabaseEnv();
+    const supabase = createSupabaseClient<Database>(
+      supabaseUrl,
+      supabaseAnonKey
+    );
     const { data, error } = await supabase
       .from("properties")
       .select(
@@ -120,7 +133,7 @@ export const getPublishedPropertyById = cache(
           profiles!properties_owner_id_fkey(id,full_name,avatar_url,created_at)
         `
       )
-      .eq("id", parsedId.data)
+      .eq("id", id)
       .eq("status", "published")
       .order("display_order", {
         ascending: true,
@@ -133,5 +146,9 @@ export const getPublishedPropertyById = cache(
     }
 
     return mapPropertyDetail(data as unknown as PropertyDetailRow);
+  },
+  ["published-property-detail"],
+  {
+    revalidate: 300,
   }
 );

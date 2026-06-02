@@ -17,6 +17,8 @@ export const metadata: Metadata = {
 };
 
 const fallbackImage = "/images/listings/listing-1.svg";
+const propertyBlurDataUrl =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSIzIiB2aWV3Qm94PSIwIDAgNCAzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjMiIGZpbGw9IiNlNWU3ZWIiLz48L3N2Zz4=";
 
 const dateFormatter = new Intl.DateTimeFormat("en-NG", {
   day: "numeric",
@@ -26,10 +28,6 @@ const dateFormatter = new Intl.DateTimeFormat("en-NG", {
 
 function getImageSource(imageUrl: string | null) {
   return imageUrl || fallbackImage;
-}
-
-function isRemoteImage(imageUrl: string) {
-  return imageUrl.startsWith("http://") || imageUrl.startsWith("https://");
 }
 
 function getStatusVariant(status: InquiryStatus) {
@@ -99,9 +97,10 @@ export default async function TenantInquiriesPage() {
                       alt=""
                       className="object-cover transition-transform group-hover:scale-105"
                       fill
+                      placeholder="blur"
+                      blurDataURL={propertyBlurDataUrl}
                       sizes="88px"
                       src={imageSource}
-                      unoptimized={isRemoteImage(imageSource)}
                     />
                   </div>
 

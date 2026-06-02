@@ -63,6 +63,8 @@ type WizardField = keyof WizardValues;
 type FieldErrors = Partial<Record<WizardField, string>>;
 
 const draftStorageKey = "livario:create-property-draft";
+const propertyBlurDataUrl =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSIzIiB2aWV3Qm94PSIwIDAgNCAzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjMiIGZpbGw9IiNlNWU3ZWIiLz48L3N2Zz4=";
 
 const steps: { id: StepId; label: string; description: string }[] = [
   { id: 0, label: "Basic Info", description: "Name the listing" },
@@ -179,6 +181,10 @@ function readDraft(): WizardValues | null {
   } catch {
     return null;
   }
+}
+
+function isPreviewImage(imageUrl: string) {
+  return imageUrl.startsWith("blob:");
 }
 
 export function PropertyForm({
@@ -676,9 +682,15 @@ export function PropertyForm({
                           alt=""
                           className="object-cover"
                           fill
+                          placeholder={isPreviewImage(image.src) ? "empty" : "blur"}
+                          blurDataURL={
+                            isPreviewImage(image.src)
+                              ? undefined
+                              : propertyBlurDataUrl
+                          }
                           sizes="120px"
                           src={image.src}
-                          unoptimized
+                          unoptimized={isPreviewImage(image.src)}
                         />
                       </div>
                     ))}

@@ -111,6 +111,7 @@ export type LandlordPropertiesResult = {
 
 export type PaginatedProperties = {
   properties: PropertyListing[];
+  isAuthenticated: boolean;
   page: number;
   pageSize: number;
   totalCount: number;

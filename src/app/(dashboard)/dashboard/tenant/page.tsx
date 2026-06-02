@@ -188,8 +188,13 @@ export default async function TenantDashboardPage() {
             <CardContent>
               {recentSavedListings.length > 0 ? (
                 <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                  {recentSavedListings.map((property) => (
-                    <PropertyCard key={property.id} property={property} />
+                  {recentSavedListings.map((property, index) => (
+                    <PropertyCard
+                      isAuthenticated
+                      key={property.id}
+                      priority={index === 0}
+                      property={property}
+                    />
                   ))}
                 </div>
               ) : (

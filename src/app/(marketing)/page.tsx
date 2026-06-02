@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -19,18 +18,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const revalidate = 300;
+
+export const metadata = createPageMetadata({
   title: "Find Your Next Home",
   description:
     "Discover premium apartments, houses, studios, and self-contained homes across Nigeria with Livario.",
-  openGraph: {
-    title: "Livario - Find your next home",
-    description:
-      "A premium, mobile-first housing discovery platform for finding and listing homes in Nigeria.",
-    type: "website",
-  },
-};
+  image: "/images/listings/listing-1.svg",
+});
 
 const featuredListings = [
   {
@@ -110,8 +107,10 @@ const tenantSteps = [
 ] as const;
 
 function FeaturedListingCard({
+  priority = false,
   listing,
 }: {
+  priority?: boolean;
   listing: (typeof featuredListings)[number];
 }) {
   return (
@@ -121,7 +120,10 @@ function FeaturedListingCard({
           alt=""
           className="object-cover"
           fill
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSIzIiB2aWV3Qm94PSIwIDAgNCAzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjMiIGZpbGw9IiNlNWU3ZWIiLz48L3N2Zz4="
+          priority={priority}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           src={listing.image}
         />
         <Badge className="absolute left-3 top-3 bg-background/90 text-foreground shadow-sm backdrop-blur">
@@ -251,8 +253,12 @@ export default function MarketingHomePage() {
             </Button>
           </div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredListings.map((listing) => (
-              <FeaturedListingCard key={listing.title} listing={listing} />
+            {featuredListings.map((listing, index) => (
+              <FeaturedListingCard
+                key={listing.title}
+                listing={listing}
+                priority={index < 3}
+              />
             ))}
           </div>
         </div>

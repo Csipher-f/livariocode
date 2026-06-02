@@ -7,24 +7,24 @@ import { Card, CardContent } from "@/components/ui/card";
 import { FavoriteButton } from "@/features/favorites/components/favorite-button";
 import type { PropertyListing } from "@/features/properties/types";
 import { formatPrice } from "@/features/properties/utils/format-price";
-import { getCurrentUser } from "@/supabase/auth";
 
 const fallbackImage = "/images/listings/listing-1.svg";
+const propertyBlurDataUrl =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSIzIiB2aWV3Qm94PSIwIDAgNCAzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjMiIGZpbGw9IiNlNWU3ZWIiLz48L3N2Zz4=";
 
 function getImageSource(imageUrl: string | null) {
   return imageUrl || fallbackImage;
 }
 
-function isRemoteImage(imageUrl: string) {
-  return imageUrl.startsWith("http://") || imageUrl.startsWith("https://");
-}
-
-export async function PropertyCard({
+export function PropertyCard({
+  isAuthenticated,
+  priority = false,
   property,
 }: {
+  isAuthenticated: boolean;
+  priority?: boolean;
   property: PropertyListing;
 }) {
-  const user = await getCurrentUser();
   const imageSource = getImageSource(property.primaryImageUrl);
   const locationLabel = property.location
     ? `${property.location.city}, ${property.location.state}`
@@ -43,10 +43,11 @@ export async function PropertyCard({
               alt=""
               className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               fill
-              priority={false}
-              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              placeholder="blur"
+              blurDataURL={propertyBlurDataUrl}
+              priority={priority}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               src={imageSource}
-              unoptimized={isRemoteImage(imageSource)}
             />
           </div>
         </Link>
@@ -59,7 +60,7 @@ export async function PropertyCard({
         <FavoriteButton
           className="absolute right-3 top-3 rounded-full bg-background/90 shadow-sm backdrop-blur hover:bg-background"
           initialIsFavorited={Boolean(property.isFavorited)}
-          isAuthenticated={Boolean(user)}
+          isAuthenticated={isAuthenticated}
           propertyId={property.id}
         />
       </div>

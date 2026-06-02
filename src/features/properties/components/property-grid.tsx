@@ -5,8 +5,10 @@ import { PropertyCard } from "@/features/properties/components/property-card";
 import type { PropertyListing } from "@/features/properties/types";
 
 export function PropertyGrid({
+  isAuthenticated,
   properties,
 }: {
+  isAuthenticated: boolean;
   properties: PropertyListing[];
 }) {
   if (properties.length === 0) {
@@ -22,8 +24,13 @@ export function PropertyGrid({
 
   return (
     <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-      {properties.map((property) => (
-        <PropertyCard key={property.id} property={property} />
+      {properties.map((property, index) => (
+        <PropertyCard
+          isAuthenticated={isAuthenticated}
+          key={property.id}
+          priority={index < 3}
+          property={property}
+        />
       ))}
     </div>
   );

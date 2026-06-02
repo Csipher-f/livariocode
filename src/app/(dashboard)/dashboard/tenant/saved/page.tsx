@@ -72,7 +72,7 @@ export default async function SavedListingsPage({
 
         {result.properties.length > 0 ? (
           <>
-            <PropertyGrid properties={result.properties} />
+            <PropertyGrid isAuthenticated properties={result.properties} />
 
             {result.totalPages > 1 ? (
               <nav

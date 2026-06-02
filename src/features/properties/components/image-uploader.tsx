@@ -39,6 +39,12 @@ type ImageItem =
 
 const maxImages = 10;
 const maxImageSize = 5 * 1024 * 1024;
+const propertyBlurDataUrl =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSIzIiB2aWV3Qm94PSIwIDAgNCAzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjMiIGZpbGw9IiNlNWU3ZWIiLz48L3N2Zz4=";
+
+function isPreviewImage(imageUrl: string) {
+  return imageUrl.startsWith("blob:");
+}
 
 function getVisibleExistingImages(
   existingImages: LandlordPropertyImage[],
@@ -305,9 +311,13 @@ export function ImageUploader({
                     alt=""
                     className="object-cover"
                     fill
+                    placeholder={isPreviewImage(imageUrl) ? "empty" : "blur"}
+                    blurDataURL={
+                      isPreviewImage(imageUrl) ? undefined : propertyBlurDataUrl
+                    }
                     sizes="(min-width: 1024px) 220px, 50vw"
                     src={imageUrl}
-                    unoptimized
+                    unoptimized={isPreviewImage(imageUrl)}
                   />
                   <div className="absolute left-2 top-2 rounded-4xl bg-background/90 px-2 py-1 text-xs font-medium shadow-sm backdrop-blur">
                     {isPrimary ? "Primary" : "Photo"}

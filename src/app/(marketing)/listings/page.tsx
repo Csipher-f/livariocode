@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -10,18 +9,14 @@ import {
   getPublishedProperties,
   parsePropertyFilters,
 } from "@/features/properties/actions/get-properties";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Browse Listings",
   description:
     "Browse published Livario property listings by city, property type, bedrooms, and price.",
-  openGraph: {
-    title: "Browse homes on Livario",
-    description:
-      "Discover apartments, houses, self-contained homes, studios, and duplexes across Nigeria.",
-    type: "website",
-  },
-};
+  canonical: "/listings",
+});
 
 type ListingsPageProps = {
   searchParams: Promise<{
@@ -110,7 +105,10 @@ export default async function ListingsPage({
               </div>
             </div>
 
-            <PropertyGrid properties={result.properties} />
+            <PropertyGrid
+              isAuthenticated={result.isAuthenticated}
+              properties={result.properties}
+            />
 
             {result.totalPages > 1 ? (
               <nav

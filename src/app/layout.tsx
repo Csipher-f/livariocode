@@ -1,29 +1,26 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { Toaster } from "@/components/ui/toaster";
+import { baseMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
 
 const geistSans = Geist({
+  display: "swap",
+  preload: true,
   variable: "--font-sans",
   subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
+  display: "swap",
+  preload: false,
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "Livario",
-    template: "%s | Livario",
-  },
-  description:
-    "A modern housing discovery and rent-tech infrastructure platform.",
-};
+export const metadata = baseMetadata;
 
 export default function RootLayout({
   children,

@@ -9,10 +9,8 @@ import type { PropertyDetailImage } from "@/features/properties/types";
 import { cn } from "@/lib/utils";
 
 const fallbackImage = "/images/listings/listing-1.svg";
-
-function isRemoteImage(imageUrl: string) {
-  return imageUrl.startsWith("http://") || imageUrl.startsWith("https://");
-}
+const propertyBlurDataUrl =
+  "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSIzIiB2aWV3Qm94PSIwIDAgNCAzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjMiIGZpbGw9IiNlNWU3ZWIiLz48L3N2Zz4=";
 
 function normalizeImages(images: PropertyDetailImage[]) {
   if (images.length > 0) {
@@ -112,9 +110,10 @@ export function PropertyGallery({
           className="object-cover transition duration-500 group-hover:scale-[1.02]"
           fill
           priority
-          sizes="(min-width: 1280px) 1184px, calc(100vw - 2rem)"
+          placeholder="blur"
+          blurDataURL={propertyBlurDataUrl}
+          sizes="100vw"
           src={activeImage.imageUrl}
-          unoptimized={isRemoteImage(activeImage.imageUrl)}
         />
         {hasMultipleImages ? (
           <span className="absolute bottom-4 right-4 rounded-full bg-background/90 px-3 py-1 text-xs font-medium shadow-sm backdrop-blur">
@@ -142,9 +141,10 @@ export function PropertyGallery({
                 alt=""
                 className="object-cover"
                 fill
+                placeholder="blur"
+                blurDataURL={propertyBlurDataUrl}
                 sizes="112px"
                 src={image.imageUrl}
-                unoptimized={isRemoteImage(image.imageUrl)}
               />
             </button>
           ))}
@@ -210,9 +210,10 @@ export function PropertyGallery({
               className="object-contain transition-opacity duration-300"
               fill
               priority
+              placeholder="blur"
+              blurDataURL={propertyBlurDataUrl}
               sizes="100vw"
               src={activeImage.imageUrl}
-              unoptimized={isRemoteImage(activeImage.imageUrl)}
             />
           </div>
         </div>

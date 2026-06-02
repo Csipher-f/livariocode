@@ -57,6 +57,7 @@ export async function deleteProperty(input: {
 
   revalidatePath("/dashboard/landlord");
   revalidatePath("/dashboard/landlord/properties");
+  revalidatePath(`/listings/${parsedInput.data.propertyId}`);
   revalidatePath("/listings");
 
   return {

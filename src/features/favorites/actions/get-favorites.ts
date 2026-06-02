@@ -111,6 +111,7 @@ export async function getFavoriteProperties({
   if (error) {
     return {
       properties: [],
+      isAuthenticated: true,
       page: safePage,
       pageSize: FAVORITES_PAGE_SIZE,
       totalCount: 0,
@@ -127,6 +128,7 @@ export async function getFavoriteProperties({
 
       return property ? [property] : [];
     }),
+    isAuthenticated: true,
     page: safePage,
     pageSize: FAVORITES_PAGE_SIZE,
     totalCount,

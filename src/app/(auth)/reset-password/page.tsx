@@ -1,6 +1,13 @@
 import { AuthCard } from "@/features/auth/components/auth-card";
 import { ResetPasswordForm } from "@/features/auth/components/reset-password-form";
+import { createPageMetadata } from "@/lib/metadata";
 import { createClient } from "@/supabase/server-client";
+
+export const metadata = createPageMetadata({
+  title: "Reset Password",
+  description: "Choose a new Livario password.",
+  noIndex: true,
+});
 
 type ResetPasswordPageProps = {
   searchParams: Promise<{

@@ -1,7 +1,12 @@
 import "server-only";
 
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
+import { unstable_cache } from "next/cache";
+
 import { getCurrentUser } from "@/supabase/auth";
+import { getSupabaseEnv } from "@/supabase/env";
 import { createClient } from "@/supabase/server-client";
+import type { Database } from "@/types/database";
 import {
   PROPERTY_TYPES,
   type PaginatedProperties,
@@ -117,76 +122,95 @@ function mapPropertyRow(
   };
 }
 
+const getCachedPublishedPropertyRows = unstable_cache(
+  async (
+    filters: PropertyFilters
+  ): Promise<{
+    rows: PropertyQueryRow[];
+    totalCount: number;
+  }> => {
+    const { supabaseAnonKey, supabaseUrl } = getSupabaseEnv();
+    const supabase = createSupabaseClient<Database>(
+      supabaseUrl,
+      supabaseAnonKey
+    );
+    const start = (filters.page - 1) * LISTINGS_PAGE_SIZE;
+    const end = start + LISTINGS_PAGE_SIZE - 1;
+
+    let query = supabase
+      .from("properties")
+      .select(
+        `
+          id,
+          title,
+          price,
+          property_type,
+          bedrooms,
+          bathrooms,
+          status,
+          property_locations!inner(city,state),
+          property_images(image_url,is_primary,display_order)
+        `,
+        { count: "exact" }
+      )
+      .eq("status", "published")
+      .order("created_at", { ascending: false })
+      .order("display_order", {
+        ascending: true,
+        foreignTable: "property_images",
+      })
+      .range(start, end);
+
+    if (filters.city) {
+      query = query.ilike("property_locations.city", `%${filters.city}%`);
+    }
+
+    if (filters.type) {
+      query = query.eq("property_type", filters.type);
+    }
+
+    if (filters.bedrooms) {
+      if (filters.bedrooms >= 4) {
+        query = query.gte("bedrooms", 4);
+      } else {
+        query = query.eq("bedrooms", filters.bedrooms);
+      }
+    }
+
+    if (filters.minPrice) {
+      query = query.gte("price", filters.minPrice);
+    }
+
+    if (filters.maxPrice) {
+      query = query.lte("price", filters.maxPrice);
+    }
+
+    const { data, count, error } = await query;
+
+    if (error) {
+      return {
+        rows: [],
+        totalCount: 0,
+      };
+    }
+
+    return {
+      rows: (data ?? []) as unknown as PropertyQueryRow[],
+      totalCount: count ?? 0,
+    };
+  },
+  ["published-properties"],
+  {
+    revalidate: 60,
+  }
+);
+
 export async function getPublishedProperties(
   filters: PropertyFilters
 ): Promise<PaginatedProperties> {
   const supabase = await createClient();
   const user = await getCurrentUser();
-  const start = (filters.page - 1) * LISTINGS_PAGE_SIZE;
-  const end = start + LISTINGS_PAGE_SIZE - 1;
-
-  let query = supabase
-    .from("properties")
-    .select(
-      `
-        id,
-        title,
-        price,
-        property_type,
-        bedrooms,
-        bathrooms,
-        status,
-        property_locations!inner(city,state),
-        property_images(image_url,is_primary,display_order)
-      `,
-      { count: "exact" }
-    )
-    .eq("status", "published")
-    .order("created_at", { ascending: false })
-    .order("display_order", {
-      ascending: true,
-      foreignTable: "property_images",
-    })
-    .range(start, end);
-
-  if (filters.city) {
-    query = query.ilike("property_locations.city", `%${filters.city}%`);
-  }
-
-  if (filters.type) {
-    query = query.eq("property_type", filters.type);
-  }
-
-  if (filters.bedrooms) {
-    if (filters.bedrooms >= 4) {
-      query = query.gte("bedrooms", 4);
-    } else {
-      query = query.eq("bedrooms", filters.bedrooms);
-    }
-  }
-
-  if (filters.minPrice) {
-    query = query.gte("price", filters.minPrice);
-  }
-
-  if (filters.maxPrice) {
-    query = query.lte("price", filters.maxPrice);
-  }
-
-  const { data, count, error } = await query;
-
-  if (error) {
-    return {
-      properties: [],
-      page: filters.page,
-      pageSize: LISTINGS_PAGE_SIZE,
-      totalCount: 0,
-      totalPages: 0,
-    };
-  }
-
-  const rows = (data ?? []) as unknown as PropertyQueryRow[];
-  const totalCount = count ?? 0;
+  const { rows, totalCount } = await getCachedPublishedPropertyRows(filters);
   const favoritePropertyIds = new Set<string>();
 
   if (user && rows.length > 0) {
@@ -206,6 +230,7 @@ export async function getPublishedProperties(
 
   return {
     properties: rows.map((row) => mapPropertyRow(row, favoritePropertyIds)),
+    isAuthenticated: Boolean(user),
     page: filters.page,
     pageSize: LISTINGS_PAGE_SIZE,
     totalCount,
