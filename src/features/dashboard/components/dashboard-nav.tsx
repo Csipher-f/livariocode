@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LogOut, Menu, ShieldCheck, type LucideIcon } from "lucide-react";
+import { LogOut, Menu, Settings, ShieldCheck, type LucideIcon } from "lucide-react";
 
 import { logout } from "@/actions/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -343,18 +343,30 @@ export function DashboardNav({
                 </button>
               </nav>
 
-              <div className="mt-auto rounded-md border border-white/10 bg-white/5 p-3">
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-full bg-white text-zinc-950">
-                    <ShieldCheck className="size-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-medium">
-                      {getAccountLabel(profile)}
-                    </p>
-                    <p className="truncate text-xs capitalize text-zinc-400">
-                      active role: {profile.active_role}
-                    </p>
+              <div className="mt-auto flex flex-col gap-3">
+                <Link
+                  className={cn(
+                    "flex min-h-12 items-center gap-3 rounded-md px-3 text-sm font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white",
+                    pathname.startsWith("/settings") && "bg-white text-zinc-950 hover:bg-white hover:text-zinc-950"
+                  )}
+                  href="/settings"
+                >
+                  <Settings className="size-4" />
+                  Settings
+                </Link>
+                <div className="rounded-md border border-white/10 bg-white/5 p-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex size-10 items-center justify-center rounded-full bg-white text-zinc-950">
+                      <ShieldCheck className="size-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">
+                        {getAccountLabel(profile)}
+                      </p>
+                      <p className="truncate text-xs capitalize text-zinc-400">
+                        active role: {profile.active_role}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
