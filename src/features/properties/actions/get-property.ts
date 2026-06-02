@@ -1,7 +1,6 @@
 import "server-only";
 
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
-import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { z } from "zod";
 
@@ -103,17 +102,12 @@ export const getPublishedPropertyById = cache(
       return null;
     }
 
-    return getCachedPublishedPropertyById(parsedId.data);
-  }
-);
-
-const getCachedPublishedPropertyById = unstable_cache(
-  async (id: string): Promise<PropertyDetail | null> => {
     const { supabaseAnonKey, supabaseUrl } = getSupabaseEnv();
     const supabase = createSupabaseClient<Database>(
       supabaseUrl,
       supabaseAnonKey
     );
+
     const { data, error } = await supabase
       .from("properties")
       .select(
@@ -128,12 +122,12 @@ const getCachedPublishedPropertyById = unstable_cache(
           bathrooms,
           status,
           created_at,
-          property_locations(address,city,state,country),
+          property_locations!location_id(address,city,state,country),
           property_images(id,image_url,is_primary,display_order),
           profiles!properties_owner_id_fkey(id,full_name,avatar_url,created_at)
         `
       )
-      .eq("id", id)
+      .eq("id", parsedId.data)
       .eq("status", "published")
       .order("display_order", {
         ascending: true,
@@ -141,14 +135,14 @@ const getCachedPublishedPropertyById = unstable_cache(
       })
       .maybeSingle();
 
+    if (error) {
+      console.error("Property detail fetch error:", JSON.stringify(error));
+    }
+
     if (error || !data) {
       return null;
     }
 
     return mapPropertyDetail(data as unknown as PropertyDetailRow);
-  },
-  ["published-property-detail"],
-  {
-    revalidate: 300,
   }
 );
