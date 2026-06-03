@@ -157,7 +157,24 @@ export async function getPublishedProperties(
     .range(start, end);
 
   if (filters.city) {
-    query = query.ilike("property_locations.city", `%${filters.city}%`);
+    const searchTerm = filters.city;
+
+    const { data: locationIds } = await supabase
+      .from("property_locations")
+      .select("id")
+      .ilike("city", `%${searchTerm}%`);
+
+    const ids = (locationIds ?? []).map((l) => l.id);
+
+    if (ids.length > 0) {
+      query = query.or(
+        `title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,location_id.in.(${ids.join(",")})`
+      );
+    } else {
+      query = query.or(
+        `title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`
+      );
+    }
   }
 
   if (filters.type) {
@@ -183,7 +200,7 @@ export async function getPublishedProperties(
   const { data, count, error } = await query;
 
   if (error) {
-    console.error("Listings fetch error:", error);
+    console.error("Listings fetch error:", JSON.stringify(error));
   }
 
   const rows = (data ?? []) as unknown as PropertyQueryRow[];
