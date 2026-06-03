@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 
 import { Toaster } from "@/components/ui/toaster";
 import { baseMetadata } from "@/lib/metadata";
@@ -20,7 +22,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = baseMetadata;
+export const metadata: Metadata = baseMetadata;
 
 export default function RootLayout({
   children,
@@ -35,6 +37,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col antialiased">
         {children}
         <Toaster />
+        <Analytics />
       </body>
     </html>
   );
