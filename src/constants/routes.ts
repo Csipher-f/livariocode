@@ -6,6 +6,7 @@ export const AUTH_ROUTES = [
 ] as const;
 
 export const PROTECTED_ROUTES = [
+  "/admin",
   "/onboarding",
   "/dashboard",
   "/dashboard/properties",

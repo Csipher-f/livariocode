@@ -56,6 +56,7 @@ export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isProtectedRoute = isRouteMatch(pathname, PROTECTED_ROUTES);
   const isAuthRoute = isRouteMatch(pathname, AUTH_ROUTES);
+  const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
 
   if (isProtectedRoute && !user) {
     const redirectUrl = request.nextUrl.clone();
@@ -63,6 +64,23 @@ export async function updateSession(request: NextRequest) {
     redirectUrl.searchParams.set("next", pathname);
 
     return NextResponse.redirect(redirectUrl);
+  }
+
+  if (isAdminRoute && user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("active_role,is_admin")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (!profile?.is_admin) {
+      return NextResponse.redirect(
+        new URL(
+          profile ? getDashboardPathForRole(profile.active_role) : ONBOARDING_PATH,
+          request.url
+        )
+      );
+    }
   }
 
   if (isAuthRoute && user) {

@@ -12,6 +12,7 @@ export type Profile = {
   full_name: string | null;
   is_tenant: boolean;
   is_landlord: boolean;
+  is_admin: boolean;
   active_role: ActiveRole;
   avatar_url: string | null;
   created_at: string;
@@ -93,6 +94,7 @@ export type Database = {
           full_name?: string | null;
           is_tenant?: boolean;
           is_landlord?: boolean;
+          is_admin?: boolean;
           active_role?: ActiveRole;
           avatar_url?: string | null;
           created_at?: string;
@@ -103,6 +105,7 @@ export type Database = {
           full_name?: string | null;
           is_tenant?: boolean;
           is_landlord?: boolean;
+          is_admin?: boolean;
           active_role?: ActiveRole;
           avatar_url?: string | null;
           updated_at?: string;
