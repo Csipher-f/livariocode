@@ -1,9 +1,10 @@
+import type { Metadata } from "next";
 import { AuthCard } from "@/features/auth/components/auth-card";
 import { LoginForm } from "@/features/auth/components/login-form";
 import { createPageMetadata } from "@/lib/metadata";
 import { redirectIfAuthenticated } from "@/supabase/auth";
 
-export const metadata = createPageMetadata({
+export const metadata: Metadata = createPageMetadata({
   title: "Log In",
   description: "Log in to your Livario account.",
   noIndex: true,

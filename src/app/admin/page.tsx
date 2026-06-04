@@ -1,10 +1,11 @@
+import type { Metadata } from "next";
 import { Building2, Inbox, UserPlus, Users } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAdminOverviewStats } from "@/features/admin/actions/get-admin-data";
 import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata = createPageMetadata({
+export const metadata: Metadata = createPageMetadata({
   title: "Admin Overview",
   description: "Livario platform administration overview.",
   canonical: "/admin",

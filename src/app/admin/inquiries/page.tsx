@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Inbox } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +21,7 @@ import { AdminPagination } from "@/features/admin/components/admin-pagination";
 import { createPageMetadata } from "@/lib/metadata";
 import type { InquiryStatus } from "@/types/database";
 
-export const metadata = createPageMetadata({
+export const metadata: Metadata = createPageMetadata({
   title: "Admin Inquiries",
   description: "Review Livario inquiries across the platform.",
   canonical: "/admin/inquiries",
@@ -51,9 +52,7 @@ function normalizeStatus(status?: string | string[]): AdminInquiryStatusFilter {
   const value = Array.isArray(status) ? status[0] : status;
   const allowed = ["pending", "read", "responded", "closed"];
 
-  return allowed.includes(value ?? "")
-    ? (value as InquiryStatus)
-    : "all";
+  return allowed.includes(value ?? "") ? (value as InquiryStatus) : "all";
 }
 
 function getBadgeVariant(status: InquiryStatus) {

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Users } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +21,7 @@ import { AdminPagination } from "@/features/admin/components/admin-pagination";
 import { UserAdminActions } from "@/features/admin/components/user-admin-actions";
 import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata = createPageMetadata({
+export const metadata: Metadata = createPageMetadata({
   title: "Admin Users",
   description: "Manage Livario platform users.",
   canonical: "/admin/users",
@@ -95,7 +96,9 @@ export default async function AdminUsersPage({
                     <TableCell>{user.email ?? "No email"}</TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        {user.isTenant ? <Badge variant="secondary">Tenant</Badge> : null}
+                        {user.isTenant ? (
+                          <Badge variant="secondary">Tenant</Badge>
+                        ) : null}
                         {user.isLandlord ? (
                           <Badge variant="outline">Landlord</Badge>
                         ) : null}

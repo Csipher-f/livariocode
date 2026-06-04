@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -19,66 +20,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { createPageMetadata } from "@/lib/metadata";
+import { getPublishedProperties } from "@/features/properties/actions/get-properties";
+import type { PropertyListing } from "@/features/properties/types";
 
 export const revalidate = 300;
 
-export const metadata = createPageMetadata({
+export const metadata: Metadata = createPageMetadata({
   title: "Find Your Next Home",
   description:
     "Discover premium apartments, houses, studios, and self-contained homes across Nigeria with Livario.",
-  image: "/images/listings/listing-1.svg",
 });
-
-const featuredListings = [
-  {
-    title: "Light-filled apartment",
-    city: "Victoria Island, Lagos",
-    price: "N2.8m / year",
-    meta: "2 beds",
-    baths: "2 baths",
-    image: "/images/listings/listing-1.svg",
-  },
-  {
-    title: "Quiet family house",
-    city: "Gwarinpa, Abuja",
-    price: "N3.5m / year",
-    meta: "4 beds",
-    baths: "4 baths",
-    image: "/images/listings/listing-2.svg",
-  },
-  {
-    title: "Modern self-contain",
-    city: "Yaba, Lagos",
-    price: "N850k / year",
-    meta: "1 bed",
-    baths: "1 bath",
-    image: "/images/listings/listing-3.svg",
-  },
-  {
-    title: "Compact studio suite",
-    city: "Lekki Phase 1, Lagos",
-    price: "N1.2m / year",
-    meta: "Studio",
-    baths: "1 bath",
-    image: "/images/listings/listing-4.svg",
-  },
-  {
-    title: "Polished duplex",
-    city: "Maitama, Abuja",
-    price: "N7m / year",
-    meta: "5 beds",
-    baths: "5 baths",
-    image: "/images/listings/listing-5.svg",
-  },
-  {
-    title: "Calm city apartment",
-    city: "Old GRA, Port Harcourt",
-    price: "N1.9m / year",
-    meta: "3 beds",
-    baths: "3 baths",
-    image: "/images/listings/listing-6.svg",
-  },
-] as const;
 
 const categories = [
   { label: "Apartment", icon: Building2 },
@@ -111,52 +62,66 @@ function FeaturedListingCard({
   listing,
 }: {
   priority?: boolean;
-  listing: (typeof featuredListings)[number];
+  listing: PropertyListing;
 }) {
   return (
-    <Card className="scroll-fade overflow-hidden border-border/80 bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-      <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
-        <Image
-          alt=""
-          className="object-cover"
-          fill
-          placeholder="blur"
-          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNCIgaGVpZ2h0PSIzIiB2aWV3Qm94PSIwIDAgNCAzIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjMiIGZpbGw9IiNlNWU3ZWIiLz48L3N2Zz4="
-          priority={priority}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          src={listing.image}
-        />
-        <Badge className="absolute left-3 top-3 bg-background/90 text-foreground shadow-sm backdrop-blur">
-          Coming soon
-        </Badge>
-      </div>
-      <CardContent className="p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h3 className="font-semibold tracking-tight">{listing.title}</h3>
-            <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-              <MapPin className="size-3.5" />
-              {listing.city}
+    <Link href={`/listings/${listing.id}`}>
+      <Card className="scroll-fade overflow-hidden border-border/80 bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+        <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
+          {listing.primaryImageUrl ? (
+            <Image
+              alt={listing.title}
+              className="object-cover"
+              fill
+              priority={priority}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              src={listing.primaryImageUrl}
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center bg-secondary">
+              <Home className="size-10 text-muted-foreground/30" />
+            </div>
+          )}
+        </div>
+        <CardContent className="p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h3 className="font-semibold tracking-tight">{listing.title}</h3>
+              {listing.location && (
+                <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+                  <MapPin className="size-3.5" />
+                  {listing.location.city}, {listing.location.state}
+                </p>
+              )}
+            </div>
+            <p className="shrink-0 text-sm font-semibold">
+              ₦{listing.price.toLocaleString()}
             </p>
           </div>
-          <p className="shrink-0 text-sm font-semibold">{listing.price}</p>
-        </div>
-        <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <BedDouble className="size-4" />
-            {listing.meta}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Bath className="size-4" />
-            {listing.baths}
-          </span>
-        </div>
-      </CardContent>
-    </Card>
+          <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
+            {listing.bedrooms && (
+              <span className="flex items-center gap-1.5">
+                <BedDouble className="size-4" />
+                {listing.bedrooms} bed{listing.bedrooms !== 1 ? "s" : ""}
+              </span>
+            )}
+            {listing.bathrooms && (
+              <span className="flex items-center gap-1.5">
+                <Bath className="size-4" />
+                {listing.bathrooms} bath{listing.bathrooms !== 1 ? "s" : ""}
+              </span>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
   );
 }
 
-export default function MarketingHomePage() {
+export default async function MarketingHomePage() {
+  const result = await getPublishedProperties({ page: 1 });
+  const featuredListings = result.properties.slice(0, 6);
+
   return (
     <main>
       <section className="relative isolate overflow-hidden">
@@ -209,7 +174,10 @@ export default function MarketingHomePage() {
         </div>
       </section>
 
-      <section aria-labelledby="search-heading" className="px-4 sm:px-6 lg:px-8">
+      <section
+        aria-labelledby="search-heading"
+        className="px-4 sm:px-6 lg:px-8"
+      >
         <div className="scroll-fade mx-auto max-w-4xl rounded-3xl border border-border bg-card p-3 shadow-sm">
           <h2 className="sr-only" id="search-heading">
             Search homes by city
@@ -237,32 +205,34 @@ export default function MarketingHomePage() {
         </div>
       </section>
 
-      <section className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">
-                Featured listings
-              </p>
-              <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-                Homes coming to Livario
-              </h2>
+      {featuredListings.length > 0 && (
+        <section className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Featured listings
+                </p>
+                <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+                  Featured homes on Livario
+                </h2>
+              </div>
+              <Button asChild variant="outline">
+                <Link href="/listings">Browse all</Link>
+              </Button>
             </div>
-            <Button asChild variant="outline">
-              <Link href="/listings">Browse all</Link>
-            </Button>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {featuredListings.map((listing, index) => (
+                <FeaturedListingCard
+                  key={listing.id}
+                  listing={listing}
+                  priority={index < 3}
+                />
+              ))}
+            </div>
           </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredListings.map((listing, index) => (
-              <FeaturedListingCard
-                key={listing.title}
-                listing={listing}
-                priority={index < 3}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="bg-secondary/50 px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
         <div className="mx-auto max-w-7xl">
@@ -342,8 +312,8 @@ export default function MarketingHomePage() {
                 Put your property in front of renters looking with intent.
               </h2>
               <p className="mt-4 max-w-xl text-sm leading-6 text-primary-foreground/75 sm:text-base">
-                Start with a clean listing flow built for quality photos,
-                simple details, and better tenant conversations.
+                Start with a clean listing flow built for quality photos, simple
+                details, and better tenant conversations.
               </p>
             </div>
             <Button asChild size="lg" variant="secondary">

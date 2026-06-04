@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CalendarDays, Mail, Shield, User } from "lucide-react";
@@ -8,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAdminUser } from "@/features/admin/actions/get-admin-data";
 import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata = createPageMetadata({
+export const metadata: Metadata = createPageMetadata({
   title: "Admin User Profile",
   description: "Review a Livario user profile.",
 });
@@ -57,7 +58,9 @@ export default async function AdminUserProfilePage({
             </div>
             <div className="flex flex-wrap gap-2">
               {user.isTenant ? <Badge variant="secondary">Tenant</Badge> : null}
-              {user.isLandlord ? <Badge variant="outline">Landlord</Badge> : null}
+              {user.isLandlord ? (
+                <Badge variant="outline">Landlord</Badge>
+              ) : null}
               {user.isAdmin ? (
                 <Badge variant="default">
                   <Shield className="size-3" />

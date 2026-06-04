@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Building2 } from "lucide-react";
 
@@ -26,7 +27,7 @@ import { PropertyAdminActions } from "@/features/admin/components/property-admin
 import { createPageMetadata } from "@/lib/metadata";
 import type { PropertyStatus } from "@/types/database";
 
-export const metadata = createPageMetadata({
+export const metadata: Metadata = createPageMetadata({
   title: "Admin Properties",
   description: "Moderate Livario property listings.",
   canonical: "/admin/properties",
@@ -53,13 +54,13 @@ const statusOptions = [
   { label: "Archived", value: "archived" },
 ];
 
-function normalizeStatus(status?: string | string[]): AdminPropertyStatusFilter {
+function normalizeStatus(
+  status?: string | string[]
+): AdminPropertyStatusFilter {
   const value = Array.isArray(status) ? status[0] : status;
   const allowed = ["published", "draft", "archived", "rented"];
 
-  return allowed.includes(value ?? "")
-    ? (value as PropertyStatus)
-    : "all";
+  return allowed.includes(value ?? "") ? (value as PropertyStatus) : "all";
 }
 
 function getBadgeVariant(status: PropertyStatus) {

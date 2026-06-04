@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -11,7 +12,7 @@ import {
 } from "@/features/properties/actions/get-properties";
 import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata = createPageMetadata({
+export const metadata: Metadata = createPageMetadata({
   title: "Browse Listings",
   description:
     "Browse published Livario property listings by city, property type, bedrooms, and price.",
@@ -61,7 +62,9 @@ export default async function ListingsPage({
   const hasPreviousPage = result.page > 1;
   const hasNextPage = result.page < result.totalPages;
   const resultLabel =
-    result.totalCount === 1 ? "1 home found" : `${result.totalCount} homes found`;
+    result.totalCount === 1
+      ? "1 home found"
+      : `${result.totalCount} homes found`;
   const filterKey = JSON.stringify(filters);
 
   return (
