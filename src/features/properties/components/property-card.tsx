@@ -52,13 +52,13 @@ export function PropertyCard({
           </div>
         </Link>
         <Badge
-          className="absolute left-2.5 top-2.5 text-[10px] sm:text-xs bg-background/90 text-foreground shadow-sm backdrop-blur"
+          className="absolute left-2.5 top-2.5 text-[10px] sm:text-xs bg-background text-foreground shadow-sm"
           variant="outline"
         >
           {property.propertyType}
         </Badge>
         <FavoriteButton
-          className="absolute right-2.5 top-2.5 size-7 sm:size-8 rounded-full bg-background/90 shadow-sm backdrop-blur hover:bg-background"
+          className="absolute right-2.5 top-2.5 size-7 sm:size-8 rounded-full bg-background shadow-sm hover:bg-background"
           initialIsFavorited={Boolean(property.isFavorited)}
           isAuthenticated={isAuthenticated}
           propertyId={property.id}
