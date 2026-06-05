@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { createPageMetadata } from "@/lib/metadata";
+import { formatPrice } from "@/lib/format-price";
 import { getPublishedProperties } from "@/features/properties/actions/get-properties";
 import type { PropertyListing } from "@/features/properties/types";
 
@@ -95,7 +96,7 @@ function FeaturedListingCard({
               )}
             </div>
             <p className="shrink-0 text-sm font-semibold">
-              ₦{listing.price.toLocaleString()}
+              {formatPrice(listing.price, listing.rentPeriod)}
             </p>
           </div>
           <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">

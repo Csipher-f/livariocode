@@ -41,6 +41,7 @@ import {
   type PropertyType,
 } from "@/features/properties/types";
 import { cn } from "@/lib/utils";
+import { formatPrice } from "@/lib/format-price";
 
 type FormMode = "create" | "edit";
 type ListingStatus = "draft" | "published";
@@ -56,6 +57,7 @@ type WizardValues = {
   state: string;
   description: string;
   price: string;
+  rentPeriod: string;
   status: ListingStatus;
 };
 
@@ -92,7 +94,8 @@ const detailsSchema = z.object({
     .string()
     .trim()
     .max(2500, "Keep the description under 2,500 characters."),
-  price: z.coerce.number().min(1, "Monthly price is required."),
+  price: z.coerce.number().min(1, "Price is required."),
+  rentPeriod: z.enum(["monthly", "six_months", "yearly"]),
   status: z.enum(["draft", "published"]),
 });
 
@@ -122,6 +125,7 @@ function getInitialValues(property?: LandlordProperty): WizardValues {
     state: property?.location?.state ?? "",
     description: property?.description ?? "",
     price: property?.price ? String(property.price) : "",
+    rentPeriod: property?.rentPeriod ?? "yearly",
     status: property?.status === "published" ? "published" : "draft",
   };
 }
@@ -138,20 +142,6 @@ function getFieldErrors(error: z.ZodError): FieldErrors {
   });
 
   return fieldErrors;
-}
-
-function formatCurrency(value: string) {
-  const amount = Number(value);
-
-  if (!Number.isFinite(amount) || amount <= 0) {
-    return "Not set";
-  }
-
-  return new Intl.NumberFormat("en-NG", {
-    currency: "NGN",
-    maximumFractionDigits: 0,
-    style: "currency",
-  }).format(amount);
 }
 
 function readDraft(): WizardValues | null {
@@ -176,6 +166,11 @@ function readDraft(): WizardValues | null {
       )
         ? (parsedDraft.propertyType as PropertyType)
         : "Apartment",
+      rentPeriod: ["monthly", "six_months", "yearly"].includes(
+        parsedDraft.rentPeriod ?? ""
+      )
+        ? (parsedDraft.rentPeriod as "monthly" | "six_months" | "yearly")
+        : "yearly",
       status: parsedDraft.status === "published" ? "published" : "draft",
     };
   } catch {
@@ -253,7 +248,10 @@ export function PropertyForm({
     value: WizardValues[Field]
   ) {
     setValues((currentValues) => ({ ...currentValues, [field]: value }));
-    setFieldErrors((currentErrors) => ({ ...currentErrors, [field]: undefined }));
+    setFieldErrors((currentErrors) => ({
+      ...currentErrors,
+      [field]: undefined,
+    }));
   }
 
   function validateStep(targetStep = step) {
@@ -431,14 +429,20 @@ export function PropertyForm({
                 <span
                   className={cn(
                     "flex h-9 items-center justify-center rounded-4xl border text-sm font-medium transition",
-                    isCurrent && "border-primary bg-primary text-primary-foreground",
-                    isComplete && "border-primary/20 bg-primary/10 text-primary",
+                    isCurrent &&
+                      "border-primary bg-primary text-primary-foreground",
+                    isComplete &&
+                      "border-primary/20 bg-primary/10 text-primary",
                     !isCurrent &&
                       !isComplete &&
                       "border-border bg-background text-muted-foreground"
                   )}
                 >
-                  {isComplete ? <Check className="size-4" /> : wizardStep.id + 1}
+                  {isComplete ? (
+                    <Check className="size-4" />
+                  ) : (
+                    wizardStep.id + 1
+                  )}
                 </span>
                 <span className="hidden min-w-0 sm:block">
                   <span className="block truncate text-sm font-medium">
@@ -534,7 +538,9 @@ export function PropertyForm({
                 <Input
                   aria-invalid={Boolean(fieldErrors.address)}
                   disabled={isPending}
-                  onChange={(event) => updateValue("address", event.target.value)}
+                  onChange={(event) =>
+                    updateValue("address", event.target.value)
+                  }
                   placeholder="Street address"
                   value={values.address}
                 />
@@ -544,7 +550,9 @@ export function PropertyForm({
                   <Input
                     aria-invalid={Boolean(fieldErrors.city)}
                     disabled={isPending}
-                    onChange={(event) => updateValue("city", event.target.value)}
+                    onChange={(event) =>
+                      updateValue("city", event.target.value)
+                    }
                     value={values.city}
                   />
                 </Field>
@@ -552,7 +560,9 @@ export function PropertyForm({
                   <Input
                     aria-invalid={Boolean(fieldErrors.state)}
                     disabled={isPending}
-                    onChange={(event) => updateValue("state", event.target.value)}
+                    onChange={(event) =>
+                      updateValue("state", event.target.value)
+                    }
                     value={values.state}
                   />
                 </Field>
@@ -564,7 +574,7 @@ export function PropertyForm({
             <WizardSection
               eyebrow="Step 3"
               title="Details"
-              subtitle="Set the price, listing state, and richer context."
+              subtitle="Set the price, rent period, listing state, and richer context."
             >
               <Field label="Description" error={fieldErrors.description}>
                 <Textarea
@@ -577,16 +587,34 @@ export function PropertyForm({
                   value={values.description}
                 />
               </Field>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Price per month" error={fieldErrors.price}>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <Field label="Price" error={fieldErrors.price}>
                   <Input
                     aria-invalid={Boolean(fieldErrors.price)}
                     disabled={isPending}
                     min={1}
-                    onChange={(event) => updateValue("price", event.target.value)}
+                    onChange={(event) =>
+                      updateValue("price", event.target.value)
+                    }
                     type="number"
                     value={values.price}
                   />
+                </Field>
+                <Field label="Rent Period">
+                  <Select
+                    disabled={isPending}
+                    onValueChange={(value) => updateValue("rentPeriod", value)}
+                    value={values.rentPeriod}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="monthly">Monthly</SelectItem>
+                      <SelectItem value="six_months">Every 6 Months</SelectItem>
+                      <SelectItem value="yearly">Yearly</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </Field>
                 <Field label="Status">
                   <Select
@@ -653,8 +681,16 @@ export function PropertyForm({
                 onEdit={() => setStep(2)}
                 title="Details"
                 rows={[
-                  ["Price", formatCurrency(values.price)],
-                  ["Status", values.status === "published" ? "Published" : "Draft"],
+                  [
+                    "Price",
+                    values.price
+                      ? formatPrice(Number(values.price), values.rentPeriod)
+                      : "Not set",
+                  ],
+                  [
+                    "Status",
+                    values.status === "published" ? "Published" : "Draft",
+                  ],
                   ["Description", values.description || "Not set"],
                 ]}
               />
@@ -666,7 +702,12 @@ export function PropertyForm({
                       {reviewImages.length} of 10 images
                     </p>
                   </div>
-                  <Button onClick={() => setStep(3)} size="sm" type="button" variant="outline">
+                  <Button
+                    onClick={() => setStep(3)}
+                    size="sm"
+                    type="button"
+                    variant="outline"
+                  >
                     <Pencil className="size-4" />
                     Edit
                   </Button>
@@ -682,7 +723,9 @@ export function PropertyForm({
                           alt=""
                           className="object-cover"
                           fill
-                          placeholder={isPreviewImage(image.src) ? "empty" : "blur"}
+                          placeholder={
+                            isPreviewImage(image.src) ? "empty" : "blur"
+                          }
                           blurDataURL={
                             isPreviewImage(image.src)
                               ? undefined
@@ -711,7 +754,11 @@ export function PropertyForm({
                   type="button"
                   variant="outline"
                 >
-                  {isPending ? <Loader2 className="size-4 animate-spin" /> : <Home className="size-4" />}
+                  {isPending ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <Home className="size-4" />
+                  )}
                   Save as Draft
                 </Button>
                 <Button
@@ -719,7 +766,11 @@ export function PropertyForm({
                   onClick={() => handleSubmit("published")}
                   type="button"
                 >
-                  {isPending ? <Loader2 className="size-4 animate-spin" /> : <Send className="size-4" />}
+                  {isPending ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <Send className="size-4" />
+                  )}
                   Publish Listing
                 </Button>
               </div>
@@ -740,7 +791,9 @@ export function PropertyForm({
         <div className="flex gap-3">
           <Button
             disabled={isPending || step === 0}
-            onClick={() => setStep((currentStep) => Math.max(currentStep - 1, 0) as StepId)}
+            onClick={() =>
+              setStep((currentStep) => Math.max(currentStep - 1, 0) as StepId)
+            }
             type="button"
             variant="outline"
           >
@@ -822,7 +875,10 @@ function ReviewSection({
       </div>
       <dl className="mt-4 grid gap-3">
         {rows.map(([label, value]) => (
-          <div className="grid gap-1 sm:grid-cols-[140px_1fr] sm:gap-4" key={label}>
+          <div
+            className="grid gap-1 sm:grid-cols-[140px_1fr] sm:gap-4"
+            key={label}
+          >
             <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               {label}
             </dt>

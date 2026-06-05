@@ -27,6 +27,7 @@ type FavoritePropertyJoin = {
   bedrooms: number | null;
   bathrooms: number | null;
   status: "published";
+  rent_period: "monthly" | "six_months" | "yearly" | null;
   property_locations: FavoritePropertyLocationJoin | null;
   property_images: FavoritePropertyImageJoin[] | null;
 };
@@ -56,6 +57,7 @@ function mapFavoriteRow(row: FavoriteQueryRow): PropertyListing | null {
     bedrooms: row.properties.bedrooms,
     bathrooms: row.properties.bathrooms,
     status: row.properties.status,
+    rentPeriod: row.properties.rent_period ?? "yearly",
     location: row.properties.property_locations
       ? {
           city: row.properties.property_locations.city ?? "Unknown city",
@@ -93,6 +95,7 @@ export async function getFavoriteProperties({
           bedrooms,
           bathrooms,
           status,
+          rent_period,
           property_locations(city,state),
           property_images(image_url,is_primary,display_order)
         )

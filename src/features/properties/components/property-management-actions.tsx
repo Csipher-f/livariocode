@@ -33,6 +33,7 @@ export function PropertyManagementActions({
     formData.set("description", property.description ?? "");
     formData.set("propertyType", property.propertyType);
     formData.set("price", String(property.price));
+    formData.set("rentPeriod", property.rentPeriod);
     formData.set("bedrooms", String(property.bedrooms ?? 0));
     formData.set("bathrooms", String(property.bathrooms ?? 0));
     formData.set("address", property.location?.address ?? "");

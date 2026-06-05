@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { FavoriteButton } from "@/features/favorites/components/favorite-button";
 import type { PropertyListing } from "@/features/properties/types";
-import { formatPrice } from "@/features/properties/utils/format-price";
+import { formatPrice } from "@/lib/format-price";
 
 const fallbackImage = "/images/listings/listing-1.svg";
 const propertyBlurDataUrl =
@@ -28,7 +28,7 @@ export function PropertyCard({
   const imageSource = getImageSource(property.primaryImageUrl);
   const locationLabel = property.location
     ? `${property.location.city}, ${property.location.state}`
-    : "Location available soon";
+    : "Location pending";
 
   return (
     <Card className="group overflow-hidden border-border/80 bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
@@ -46,53 +46,48 @@ export function PropertyCard({
               placeholder="blur"
               blurDataURL={propertyBlurDataUrl}
               priority={priority}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
               src={imageSource}
             />
           </div>
         </Link>
         <Badge
-          className="absolute left-3 top-3 bg-background/90 text-foreground shadow-sm backdrop-blur"
+          className="absolute left-2.5 top-2.5 text-[10px] sm:text-xs bg-background/90 text-foreground shadow-sm backdrop-blur"
           variant="outline"
         >
           {property.propertyType}
         </Badge>
         <FavoriteButton
-          className="absolute right-3 top-3 rounded-full bg-background/90 shadow-sm backdrop-blur hover:bg-background"
+          className="absolute right-2.5 top-2.5 size-7 sm:size-8 rounded-full bg-background/90 shadow-sm backdrop-blur hover:bg-background"
           initialIsFavorited={Boolean(property.isFavorited)}
           isAuthenticated={isAuthenticated}
           propertyId={property.id}
         />
       </div>
-      <CardContent className="p-4">
+      <CardContent className="p-3 sm:p-4">
         <Link className="block" href={`/listings/${property.id}`}>
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h2 className="truncate font-semibold tracking-tight">
-                {property.title}
-              </h2>
-              <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                <MapPin className="size-3.5 shrink-0" />
-                <span className="truncate">{locationLabel}</span>
-              </p>
-            </div>
-            <p className="shrink-0 text-right text-sm font-semibold">
-              {formatPrice(property.price)}
-              <span className="block text-xs font-normal text-muted-foreground">
-                / month
-              </span>
+          <div className="grid gap-1 min-w-0">
+            <h2 className="truncate font-semibold tracking-tight text-sm sm:text-base text-foreground">
+              {property.title}
+            </h2>
+            <p className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground">
+              <MapPin className="size-3 sm:size-3.5 shrink-0 text-muted-foreground/70" />
+              <span className="truncate">{locationLabel}</span>
+            </p>
+            <p className="mt-1 text-sm sm:text-base font-semibold text-primary">
+              {formatPrice(property.price, property.rentPeriod)}
             </p>
           </div>
-          <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-            <span className="flex min-h-8 items-center gap-1.5">
-              <BedDouble className="size-4" />
+          <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground border-t border-border/50 pt-2.5">
+            <span className="flex items-center gap-1">
+              <BedDouble className="size-3.5 text-muted-foreground/70" />
               {property.bedrooms ? `${property.bedrooms} beds` : "Studio"}
             </span>
-            <span className="flex min-h-8 items-center gap-1.5">
-              <Bath className="size-4" />
+            <span className="flex items-center gap-1">
+              <Bath className="size-3.5 text-muted-foreground/70" />
               {property.bathrooms
                 ? `${property.bathrooms} baths`
-                : "Baths listed soon"}
+                : "Baths"}
             </span>
           </div>
         </Link>

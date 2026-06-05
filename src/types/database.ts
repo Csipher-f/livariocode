@@ -39,6 +39,7 @@ export type Property = {
   title: string;
   description: string | null;
   price: number;
+  rent_period: "monthly" | "six_months" | "yearly";
   property_type: string;
   bedrooms: number | null;
   bathrooms: number | null;
@@ -146,6 +147,7 @@ export type Database = {
           title: string;
           description?: string | null;
           price: number;
+          rent_period?: "monthly" | "six_months" | "yearly";
           property_type: string;
           bedrooms?: number | null;
           bathrooms?: number | null;
@@ -158,6 +160,7 @@ export type Database = {
           title?: string;
           description?: string | null;
           price?: number;
+          rent_period?: "monthly" | "six_months" | "yearly";
           property_type?: string;
           bedrooms?: number | null;
           bathrooms?: number | null;
@@ -238,6 +241,7 @@ export type Database = {
       active_role: ActiveRole;
       property_status: PropertyStatus;
       inquiry_status: InquiryStatus;
+      rent_period: "monthly" | "six_months" | "yearly";
     };
     CompositeTypes: Record<string, never>;
   };

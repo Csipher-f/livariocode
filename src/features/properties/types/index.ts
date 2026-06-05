@@ -23,6 +23,7 @@ export type PropertyListing = {
   id: string;
   title: string;
   price: number;
+  rentPeriod: "monthly" | "six_months" | "yearly";
   propertyType: string;
   bedrooms: number | null;
   bathrooms: number | null;
@@ -48,6 +49,7 @@ export type PropertyDetail = {
   title: string;
   description: string | null;
   price: number;
+  rentPeriod: "monthly" | "six_months" | "yearly";
   propertyType: string;
   bedrooms: number | null;
   bathrooms: number | null;
@@ -84,6 +86,7 @@ export type LandlordProperty = {
   title: string;
   description: string | null;
   price: number;
+  rentPeriod: "monthly" | "six_months" | "yearly";
   propertyType: string;
   bedrooms: number | null;
   bathrooms: number | null;

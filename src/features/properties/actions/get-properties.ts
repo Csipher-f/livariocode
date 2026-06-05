@@ -42,6 +42,7 @@ type PropertyQueryRow = {
   id: string;
   title: string;
   price: number;
+  rent_period: "monthly" | "six_months" | "yearly";
   property_type: string;
   bedrooms: number | null;
   bathrooms: number | null;
@@ -106,6 +107,7 @@ function mapPropertyRow(
     id: row.id,
     title: row.title,
     price: row.price,
+    rentPeriod: row.rent_period,
     propertyType: row.property_type,
     bedrooms: row.bedrooms,
     bathrooms: row.bathrooms,
@@ -139,6 +141,7 @@ export async function getPublishedProperties(
         id,
         title,
         price,
+        rent_period,
         property_type,
         bedrooms,
         bathrooms,

@@ -2,7 +2,7 @@ import { Bath, BedDouble, CalendarDays, MapPin } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import type { PropertyDetail } from "@/features/properties/types";
-import { formatPrice } from "@/features/properties/utils/format-price";
+import { formatPrice } from "@/lib/format-price";
 
 const postedDateFormatter = new Intl.DateTimeFormat("en-NG", {
   day: "numeric",
@@ -40,10 +40,7 @@ export function PropertyInfo({ property }: { property: PropertyDetail }) {
         </div>
         <div className="flex flex-col gap-4 border-y border-border py-5 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-2xl font-semibold tracking-tight">
-            {formatPrice(property.price)}
-            <span className="ml-1 text-sm font-normal text-muted-foreground">
-              / month
-            </span>
+            {formatPrice(property.price, property.rentPeriod)}
           </p>
           <div className="flex items-center gap-5 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-2">

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getLandlordProperties } from "@/features/properties/actions/get-landlord-properties";
 import { PropertyManagementActions } from "@/features/properties/components/property-management-actions";
-import { formatPrice } from "@/features/properties/utils/format-price";
+import { formatPrice } from "@/lib/format-price";
 import { requireRole } from "@/supabase/auth";
 
 export const metadata: Metadata = {
@@ -69,7 +69,7 @@ export default async function LandlordPropertiesPage() {
                   </Badge>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
-                  <span>{formatPrice(property.price)} / month</span>
+                  <span>{formatPrice(property.price, property.rentPeriod)}</span>
                   <span>
                     Created {dateFormatter.format(new Date(property.createdAt))}
                   </span>

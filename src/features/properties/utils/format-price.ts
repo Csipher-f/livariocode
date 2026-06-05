@@ -1,9 +1,5 @@
-const nairaFormatter = new Intl.NumberFormat("en-NG", {
-  currency: "NGN",
-  maximumFractionDigits: 0,
-  style: "currency",
-});
+import { formatPrice as sharedFormatPrice } from "@/lib/format-price";
 
-export function formatPrice(price: number) {
-  return nairaFormatter.format(price);
+export function formatPrice(price: number, rentPeriod: string = "yearly") {
+  return sharedFormatPrice(price, rentPeriod);
 }

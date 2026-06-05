@@ -107,6 +107,7 @@ export async function updateProperty(
       title: values.title,
       description: values.description || null,
       price: values.price,
+      rent_period: values.rentPeriod,
       property_type: values.propertyType,
       bedrooms: values.bedrooms,
       bathrooms: values.bathrooms,

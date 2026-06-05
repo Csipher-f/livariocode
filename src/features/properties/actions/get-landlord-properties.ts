@@ -32,6 +32,7 @@ type LandlordPropertyRow = {
   title: string;
   description: string | null;
   price: number;
+  rent_period: "monthly" | "six_months" | "yearly";
   property_type: string;
   bedrooms: number | null;
   bathrooms: number | null;
@@ -52,6 +53,7 @@ function mapLandlordProperty(row: LandlordPropertyRow): LandlordProperty {
     title: row.title,
     description: row.description,
     price: row.price,
+    rentPeriod: row.rent_period,
     propertyType: row.property_type,
     bedrooms: row.bedrooms,
     bathrooms: row.bathrooms,
@@ -93,6 +95,7 @@ export const getLandlordProperties = cache(
           title,
           description,
           price,
+          rent_period,
           property_type,
           bedrooms,
           bathrooms,
@@ -165,6 +168,7 @@ export const getLandlordPropertyById = cache(
           title,
           description,
           price,
+          rent_period,
           property_type,
           bedrooms,
           bathrooms,

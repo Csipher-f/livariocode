@@ -37,6 +37,7 @@ type PropertyDetailRow = {
   title: string;
   description: string | null;
   price: number;
+  rent_period: "monthly" | "six_months" | "yearly";
   property_type: string;
   bedrooms: number | null;
   bathrooms: number | null;
@@ -70,6 +71,7 @@ function mapPropertyDetail(row: PropertyDetailRow): PropertyDetail {
     title: row.title,
     description: row.description,
     price: row.price,
+    rentPeriod: row.rent_period,
     propertyType: row.property_type,
     bedrooms: row.bedrooms,
     bathrooms: row.bathrooms,
@@ -117,6 +119,7 @@ export const getPublishedPropertyById = cache(
           title,
           description,
           price,
+          rent_period,
           property_type,
           bedrooms,
           bathrooms,
