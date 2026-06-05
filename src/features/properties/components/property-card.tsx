@@ -31,7 +31,7 @@ export function PropertyCard({
     : "Location pending";
 
   return (
-    <Card className="group overflow-hidden border-border/80 bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+    <Card className="group overflow-hidden border-border/80 bg-card shadow-sm transition-all duration-300 sm:hover:-translate-y-1 sm:hover:shadow-md">
       <div className="relative">
         <Link
           aria-label={`View ${property.title}`}
@@ -41,7 +41,7 @@ export function PropertyCard({
           <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
             <Image
               alt=""
-              className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              className="object-cover transition-transform duration-500 sm:group-hover:scale-[1.03]"
               fill
               placeholder="blur"
               blurDataURL={propertyBlurDataUrl}
@@ -85,9 +85,7 @@ export function PropertyCard({
             </span>
             <span className="flex items-center gap-1">
               <Bath className="size-3.5 text-muted-foreground/70" />
-              {property.bathrooms
-                ? `${property.bathrooms} baths`
-                : "Baths"}
+              {property.bathrooms ? `${property.bathrooms} baths` : "Baths"}
             </span>
           </div>
         </Link>

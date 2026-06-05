@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  Bath,
-  BedDouble,
   Building2,
   Home,
   KeyRound,
-  MapPin,
   MessageCircle,
   Search,
   Sparkles,
@@ -17,12 +13,10 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { createPageMetadata } from "@/lib/metadata";
-import { formatPrice } from "@/lib/format-price";
 import { getPublishedProperties } from "@/features/properties/actions/get-properties";
-import type { PropertyListing } from "@/features/properties/types";
+import { PropertyCard } from "@/features/properties/components/property-card";
 
 export const revalidate = 300;
 
@@ -57,67 +51,6 @@ const tenantSteps = [
     icon: KeyRound,
   },
 ] as const;
-
-function FeaturedListingCard({
-  priority = false,
-  listing,
-}: {
-  priority?: boolean;
-  listing: PropertyListing;
-}) {
-  return (
-    <Link href={`/listings/${listing.id}`}>
-      <Card className="scroll-fade overflow-hidden border-border/80 bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-        <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
-          {listing.primaryImageUrl ? (
-            <Image
-              alt={listing.title}
-              className="object-cover"
-              fill
-              priority={priority}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              src={listing.primaryImageUrl}
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center bg-secondary">
-              <Home className="size-10 text-muted-foreground/30" />
-            </div>
-          )}
-        </div>
-        <CardContent className="p-4">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <h3 className="font-semibold tracking-tight">{listing.title}</h3>
-              {listing.location && (
-                <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
-                  <MapPin className="size-3.5" />
-                  {listing.location.city}, {listing.location.state}
-                </p>
-              )}
-            </div>
-            <p className="shrink-0 text-sm font-semibold">
-              {formatPrice(listing.price, listing.rentPeriod)}
-            </p>
-          </div>
-          <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-            {listing.bedrooms && (
-              <span className="flex items-center gap-1.5">
-                <BedDouble className="size-4" />
-                {listing.bedrooms} bed{listing.bedrooms !== 1 ? "s" : ""}
-              </span>
-            )}
-            {listing.bathrooms && (
-              <span className="flex items-center gap-1.5">
-                <Bath className="size-4" />
-                {listing.bathrooms} bath{listing.bathrooms !== 1 ? "s" : ""}
-              </span>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-    </Link>
-  );
-}
 
 export default async function MarketingHomePage() {
   const result = await getPublishedProperties({ page: 1 });
@@ -224,9 +157,10 @@ export default async function MarketingHomePage() {
             </div>
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
               {featuredListings.map((listing, index) => (
-                <FeaturedListingCard
+                <PropertyCard
                   key={listing.id}
-                  listing={listing}
+                  property={listing}
+                  isAuthenticated={false}
                   priority={index < 3}
                 />
               ))}
