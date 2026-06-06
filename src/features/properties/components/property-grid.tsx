@@ -23,7 +23,7 @@ export function PropertyGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-3">
+    <div className="grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-3 isolate">
       {properties.map((property, index) => (
         <PropertyCard
           isAuthenticated={isAuthenticated}
