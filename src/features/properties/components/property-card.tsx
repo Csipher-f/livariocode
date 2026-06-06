@@ -38,11 +38,12 @@ export function PropertyCard({
           className="block"
           href={`/listings/${property.id}`}
         >
-          <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
+          <div className="overflow-hidden bg-secondary">
             <Image
               alt=""
-              className="object-cover transition-transform duration-500 sm:group-hover:scale-[1.03]"
-              fill
+              className="w-full object-cover transition-transform duration-500 sm:group-hover:scale-[1.03]"
+              width={400}
+              height={300}
               placeholder="blur"
               blurDataURL={propertyBlurDataUrl}
               priority={priority}
