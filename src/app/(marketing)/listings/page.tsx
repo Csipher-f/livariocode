@@ -68,7 +68,7 @@ export default async function ListingsPage({
   const filterKey = JSON.stringify(filters);
 
   return (
-    <main className="bg-secondary/30 transform-gpu">
+    <main className="bg-secondary/30">
       <section className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
         <div className="mx-auto max-w-3xl text-center lg:mx-0 lg:text-left">
           <p className="text-sm font-medium text-muted-foreground">

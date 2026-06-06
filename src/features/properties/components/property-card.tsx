@@ -31,7 +31,7 @@ export function PropertyCard({
     : "Location pending";
 
   return (
-    <Card className="group isolate overflow-hidden border-border/80 bg-card shadow-sm transition-all duration-300 sm:hover:-translate-y-1 sm:hover:shadow-md">
+    <Card className="group isolate transform-gpu overflow-hidden border-border/80 bg-card shadow-sm transition-all duration-300 sm:hover:-translate-y-1 sm:hover:shadow-md">
       <div className="relative">
         <Link
           aria-label={`View ${property.title}`}
