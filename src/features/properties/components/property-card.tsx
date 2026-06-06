@@ -31,14 +31,14 @@ export function PropertyCard({
     : "Location pending";
 
   return (
-    <Card className="group isolate transform-gpu overflow-hidden border-border/80 bg-card shadow-sm transition-all duration-300 sm:hover:-translate-y-1 sm:hover:shadow-md">
+    <Card className="group isolate overflow-hidden border border-border bg-card shadow-sm hover:shadow-md transition-shadow duration-200">
       <div className="relative">
         <Link
           aria-label={`View ${property.title}`}
           className="block"
           href={`/listings/${property.id}`}
         >
-          <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
+          <div className="relative aspect-4/3 overflow-hidden bg-secondary">
             <Image
               alt=""
               className="object-cover transition-transform duration-500 sm:group-hover:scale-[1.03]"
@@ -52,7 +52,7 @@ export function PropertyCard({
           </div>
         </Link>
         <Badge
-          className="absolute left-2.5 top-2.5 text-[10px] sm:text-xs bg-background text-foreground shadow-sm"
+          className="absolute left-2.5 top-2.5 text-[10px] sm:text-xs bg-[#FDE8DF] text-[#C44D28] border-0 hover:bg-[#FDE8DF] shadow-sm"
           variant="outline"
         >
           {property.propertyType}
@@ -67,24 +67,24 @@ export function PropertyCard({
       <CardContent className="p-3 sm:p-4">
         <Link className="block" href={`/listings/${property.id}`}>
           <div className="grid gap-1 min-w-0">
-            <h2 className="truncate font-semibold tracking-tight text-sm sm:text-base text-foreground">
+            <h2 className="truncate font-medium tracking-tight text-sm sm:text-base text-foreground">
               {property.title}
             </h2>
-            <p className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground">
-              <MapPin className="size-3 sm:size-3.5 shrink-0 text-muted-foreground/70" />
+            <p className="flex items-center gap-1 text-sm text-foreground-muted">
+              <MapPin className="size-3 sm:size-3.5 shrink-0 text-foreground-muted/70" />
               <span className="truncate">{locationLabel}</span>
             </p>
-            <p className="mt-1 text-sm sm:text-base font-semibold text-primary">
+            <p className="mt-1 text-sm sm:text-base font-semibold text-[#E8623A]">
               {formatPrice(property.price, property.rentPeriod)}
             </p>
           </div>
-          <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground border-t border-border/50 pt-2.5">
+          <div className="mt-3 flex items-center gap-3 text-sm text-foreground-muted border-t border-border/50 pt-2.5">
             <span className="flex items-center gap-1">
-              <BedDouble className="size-3.5 text-muted-foreground/70" />
+              <BedDouble className="size-3.5 text-foreground-muted/70" />
               {property.bedrooms ? `${property.bedrooms} beds` : "Studio"}
             </span>
             <span className="flex items-center gap-1">
-              <Bath className="size-3.5 text-muted-foreground/70" />
+              <Bath className="size-3.5 text-foreground-muted/70" />
               {property.bathrooms ? `${property.bathrooms} baths` : "Baths"}
             </span>
           </div>

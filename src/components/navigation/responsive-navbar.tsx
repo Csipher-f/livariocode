@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 
+import { LivarioLogo } from "@/components/livario-logo";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -20,7 +21,6 @@ export type NavigationItem = {
 };
 
 type ResponsiveNavbarProps = {
-  brand?: string;
   items?: NavigationItem[];
   actions?: React.ReactNode;
   className?: string;
@@ -31,7 +31,6 @@ function isActivePath(pathname: string, href: string) {
 }
 
 function ResponsiveNavbar({
-  brand = "Livario",
   items = [],
   actions,
   className,
@@ -49,12 +48,8 @@ function ResponsiveNavbar({
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="flex items-center gap-2 font-semibold tracking-tight"
         >
-          <span className="flex size-8 items-center justify-center rounded-md bg-primary text-sm text-primary-foreground">
-            L
-          </span>
-          <span>{brand}</span>
+          <LivarioLogo />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
@@ -92,7 +87,9 @@ function ResponsiveNavbar({
           </SheetTrigger>
           <SheetContent side="right" className="w-[min(22rem,86vw)]">
             <SheetHeader>
-              <SheetTitle>{brand}</SheetTitle>
+              <SheetTitle>
+                <LivarioLogo />
+              </SheetTitle>
             </SheetHeader>
             <nav className="grid gap-1" aria-label="Mobile primary">
               {items.map((item) => {

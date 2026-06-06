@@ -96,7 +96,7 @@ export default async function AdminPropertiesPage({
         <p className="text-sm font-medium text-muted-foreground">
           Property moderation
         </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl text-[#1C1612]">
           Properties
         </h1>
       </div>

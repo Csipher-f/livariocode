@@ -65,7 +65,7 @@ export default async function AdminUsersPage({
         <p className="text-sm font-medium text-muted-foreground">
           User management
         </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl text-[#1C1612]">
           Users
         </h1>
       </div>

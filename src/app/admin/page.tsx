@@ -44,7 +44,7 @@ export default async function AdminOverviewPage() {
         <p className="text-sm font-medium text-muted-foreground">
           Platform administration
         </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl text-[#1C1612]">
           Overview
         </h1>
       </div>

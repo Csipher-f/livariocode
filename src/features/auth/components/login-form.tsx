@@ -51,7 +51,7 @@ export function LoginForm({ notice }: LoginFormProps) {
         labelAction={
           <Link
             href="/forgot-password"
-            className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+            className="text-sm font-medium text-[#E8623A] hover:text-[#C44D28] underline-offset-4 hover:underline"
           >
             Forgot password?
           </Link>
@@ -66,7 +66,7 @@ export function LoginForm({ notice }: LoginFormProps) {
         Don&apos;t have an account?{" "}
         <Link
           href="/signup"
-          className="font-medium text-primary underline-offset-4 hover:underline"
+          className="font-medium text-[#E8623A] hover:text-[#C44D28] underline-offset-4 hover:underline"
         >
           Sign up
         </Link>

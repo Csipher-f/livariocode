@@ -14,6 +14,7 @@ import {
   Users,
 } from "lucide-react";
 
+import { LivarioLogo } from "@/components/livario-logo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -56,8 +57,10 @@ function AdminLinks({ className }: { className?: string }) {
         return (
           <Link
             className={cn(
-              "flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white",
-              active && "bg-white text-zinc-950 hover:bg-white hover:text-zinc-950"
+              "flex min-h-11 items-center gap-3 px-3 text-sm font-medium transition",
+              active
+                ? "bg-[#FDE8DF] text-[#E8623A] font-medium rounded-lg"
+                : "text-[#8C7B6B] hover:bg-[#F5EFE8] hover:text-[#1C1612] rounded-md"
             )}
             href={item.href}
             key={item.href}
@@ -69,7 +72,7 @@ function AdminLinks({ className }: { className?: string }) {
       })}
 
       <button
-        className="flex min-h-11 items-center gap-3 rounded-md px-3 text-left text-sm font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white focus-visible:ring-3 focus-visible:ring-white/20 focus-visible:outline-none"
+        className="flex min-h-11 items-center gap-3 rounded-md px-3 text-left text-sm font-medium text-[#8C7B6B] transition hover:bg-[#F5EFE8] hover:text-[#1C1612] focus-visible:ring-3 focus-visible:ring-[#E8623A]/20 focus-visible:outline-none"
         onClick={showComingSoonToast}
         type="button"
       >
@@ -83,13 +86,13 @@ function AdminLinks({ className }: { className?: string }) {
 export function AdminNav() {
   return (
     <>
-      <aside className="hidden w-72 shrink-0 bg-zinc-950 text-white lg:flex lg:min-h-screen lg:flex-col">
-        <div className="border-b border-white/10 p-6">
-          <Link className="text-lg font-semibold tracking-tight" href="/">
-            Livario
+      <aside className="hidden w-72 shrink-0 bg-[#FFF8F2] border-r border-[#E8DDD4] text-[#1C1612] lg:flex lg:min-h-screen lg:flex-col">
+        <div className="border-b border-[#E8DDD4] p-6">
+          <Link href="/">
+            <LivarioLogo />
           </Link>
           <div className="mt-3 flex items-center gap-2">
-            <Badge className="border-white/10 bg-white/10 text-white" variant="outline">
+            <Badge className="border-0 bg-[#FDE8DF] text-[#C44D28] font-semibold" variant="outline">
               <Shield className="size-3" />
               Admin
             </Badge>
@@ -98,7 +101,7 @@ export function AdminNav() {
 
         <AdminLinks className="p-4" />
 
-        <div className="mt-auto border-t border-white/10 p-4">
+        <div className="mt-auto border-t border-[#E8DDD4] p-4">
           <Button asChild className="w-full justify-start" variant="secondary">
             <Link href="/">
               <ExternalLink className="size-4" />
@@ -108,10 +111,10 @@ export function AdminNav() {
         </div>
       </aside>
 
-      <header className="sticky top-0 z-40 border-b border-border bg-background/95 px-4 py-3 backdrop-blur lg:hidden">
+      <header className="sticky top-0 z-40 border-b border-[#E8DDD4] bg-[#FFF8F2]/95 px-4 py-3 backdrop-blur lg:hidden">
         <div className="mx-auto flex max-w-md items-center justify-between gap-3">
-          <Link className="text-lg font-semibold tracking-tight" href="/">
-            Livario Admin
+          <Link href="/">
+            <LivarioLogo />
           </Link>
 
           <Sheet>
@@ -121,13 +124,13 @@ export function AdminNav() {
               </Button>
             </SheetTrigger>
             <SheetContent
-              className="w-[min(22rem,88vw)] gap-4 border-zinc-800 bg-zinc-950 p-4 text-white sm:p-5"
+              className="w-[min(22rem,88vw)] gap-4 border-[#E8DDD4] bg-[#FFF8F2] p-4 text-[#1C1612] sm:p-5"
               side="left"
             >
-              <SheetHeader className="border-b border-white/10 pb-4">
-                <SheetTitle className="flex items-center gap-2 text-left text-xl text-white">
-                  <Home className="size-5" />
-                  Livario Admin
+              <SheetHeader className="border-b border-[#E8DDD4] pb-4">
+                <SheetTitle className="flex items-center gap-2 text-left text-xl text-[#1C1612]">
+                  <Home className="size-5 text-[#E8623A]" />
+                  <LivarioLogo />
                 </SheetTitle>
               </SheetHeader>
               <AdminLinks />

@@ -10,7 +10,7 @@ type AuthCardProps = {
 
 export function AuthCard({ title, description, children }: AuthCardProps) {
   return (
-    <Card className="w-full border-border/70 bg-card/95 shadow-sm">
+    <Card className="w-full bg-[#FFF8F2] border border-[#E8DDD4] rounded-xl shadow-sm">
       <CardHeader className="gap-2 px-5 pb-4 pt-6 text-center sm:px-7 sm:pt-7">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           {title}

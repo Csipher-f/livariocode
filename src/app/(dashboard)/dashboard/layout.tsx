@@ -18,7 +18,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-secondary/30 lg:flex">
+    <div className="min-h-screen bg-[#FDFAF7] lg:flex">
       {profile.active_role === "landlord" ? (
         <LandlordSidebar profile={profile} />
       ) : (

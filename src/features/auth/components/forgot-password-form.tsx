@@ -44,7 +44,7 @@ export function ForgotPasswordForm() {
       />
       <Link
         href="/login"
-        className="text-center text-sm font-medium text-primary underline-offset-4 hover:underline"
+        className="text-center text-sm font-medium text-[#E8623A] hover:text-[#C44D28] underline-offset-4 hover:underline"
       >
         Back to log in
       </Link>

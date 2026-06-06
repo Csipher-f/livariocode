@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { LogOut, Menu, Settings, ShieldCheck, type LucideIcon } from "lucide-react";
 
 import { logout } from "@/actions/auth";
+import { LivarioLogo } from "@/components/livario-logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -113,7 +114,7 @@ function ComingSoonButton({
   return (
     <button
       className={cn(
-        "flex min-h-11 w-full items-center gap-3 rounded-md px-3 text-left text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/20 focus-visible:outline-none",
+        "flex min-h-11 w-full items-center gap-3 rounded-md px-3 text-left text-sm font-medium text-[#8C7B6B] transition hover:bg-[#F5EFE8] hover:text-[#1C1612] focus-visible:ring-3 focus-visible:ring-[#E8623A]/20 focus-visible:outline-none",
         className
       )}
       onClick={showComingSoonToast}
@@ -138,8 +139,10 @@ function DesktopLink({
   return (
     <Link
       className={cn(
-        "flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground",
-        isActive && "bg-secondary text-foreground"
+        "flex min-h-11 items-center gap-3 px-3 text-sm transition",
+        isActive
+          ? "bg-[#FDE8DF] text-[#E8623A] font-medium rounded-lg"
+          : "text-[#8C7B6B] hover:bg-[#F5EFE8] hover:text-[#1C1612] rounded-md font-medium"
       )}
       href={item.href}
     >
@@ -186,8 +189,10 @@ function BottomLink({
   return (
     <Link
       className={cn(
-        "flex min-h-12 flex-col items-center justify-center gap-1 rounded-md px-1 text-xs font-medium text-muted-foreground transition",
-        isActive && "bg-secondary text-foreground"
+        "flex min-h-12 flex-col items-center justify-center gap-1 rounded-md px-1 text-xs font-medium transition",
+        isActive
+          ? "text-[#E8623A] bg-[#FDE8DF]/50 font-semibold"
+          : "text-[#8C7B6B] hover:text-[#1C1612]"
       )}
       href={item.href}
     >
@@ -236,12 +241,12 @@ export function DashboardNav({
 
   return (
     <>
-      <aside className="hidden w-72 shrink-0 border-r border-border bg-background lg:flex lg:min-h-screen lg:flex-col">
-        <div className="border-b border-border p-6">
-          <Link className="text-lg font-semibold tracking-tight" href="/">
-            Livario
+      <aside className="hidden w-72 shrink-0 border-r border-[#E8DDD4] bg-[#FFF8F2] lg:flex lg:min-h-screen lg:flex-col">
+        <div className="border-b border-[#E8DDD4] p-6">
+          <Link href="/">
+            <LivarioLogo />
           </Link>
-          <p className="mt-1 text-sm text-muted-foreground">{title}</p>
+          <p className="mt-1 text-sm text-[#8C7B6B]">{title}</p>
         </div>
 
         <nav className="grid gap-1 p-4" aria-label={`${title} navigation`}>
@@ -253,14 +258,14 @@ export function DashboardNav({
             />
           ))}
 
-          <div className="my-2 h-px bg-border" />
+          <div className="my-2 h-px bg-[#E8DDD4]" />
 
           {comingSoonItems.map((item) => (
             <ComingSoonButton item={item} key={item.label} />
           ))}
 
           <button
-            className="flex min-h-11 items-center gap-3 rounded-md px-3 text-left text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/20 focus-visible:outline-none"
+            className="flex min-h-11 items-center gap-3 rounded-md px-3 text-left text-sm font-medium text-[#8C7B6B] transition hover:bg-[#F5EFE8] hover:text-[#1C1612] focus-visible:ring-3 focus-visible:ring-[#E8623A]/20 focus-visible:outline-none"
             disabled={isSigningOut}
             onClick={handleSignOut}
             type="button"
@@ -276,10 +281,10 @@ export function DashboardNav({
         </div>
       </aside>
 
-      <header className="sticky top-0 z-40 border-b border-border bg-background/95 px-4 py-3 backdrop-blur lg:hidden">
+      <header className="sticky top-0 z-40 border-b border-[#E8DDD4] bg-[#FFF8F2]/95 px-4 py-3 backdrop-blur lg:hidden">
         <div className="mx-auto flex max-w-md items-center justify-between gap-3">
-          <Link className="text-lg font-semibold tracking-tight" href="/">
-            Livario
+          <Link href="/">
+            <LivarioLogo />
           </Link>
 
           <Sheet>
@@ -298,7 +303,7 @@ export function DashboardNav({
             >
               <SheetHeader className="border-b border-white/10 pb-4">
                 <SheetTitle className="text-left text-xl text-white">
-                  Livario
+                  <LivarioLogo variant="light" />
                 </SheetTitle>
               </SheetHeader>
 
@@ -377,7 +382,7 @@ export function DashboardNav({
 
       <nav
         aria-label={`${title} mobile navigation`}
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-2 py-2 backdrop-blur lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-[#E8DDD4] bg-[#FFF8F2] px-2 py-2 backdrop-blur lg:hidden"
       >
         <div className="mx-auto grid max-w-md grid-cols-4 gap-1">
           {bottomItems.map((item) => (

@@ -87,7 +87,7 @@ export default async function AdminInquiriesPage({
         <p className="text-sm font-medium text-muted-foreground">
           Inquiry overview
         </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl text-[#1C1612]">
           Inquiries
         </h1>
       </div>

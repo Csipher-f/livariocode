@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 function PropertyCardSkeleton() {
   return (
     <div className="overflow-hidden rounded-md border border-border bg-card shadow-sm">
-      <Skeleton className="aspect-[4/3] rounded-none" />
+      <Skeleton className="aspect-4/3 rounded-none" />
       <div className="grid gap-4 p-4">
         <div className="flex items-start justify-between gap-4">
           <div className="grid flex-1 gap-2">

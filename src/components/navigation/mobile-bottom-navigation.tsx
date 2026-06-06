@@ -28,7 +28,7 @@ function MobileBottomNavigation({
       data-slot="mobile-bottom-navigation"
       aria-label="Primary mobile"
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/95 px-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-2 shadow-[0_-8px_24px_rgb(0_0_0_/_0.04)] backdrop-blur md:hidden",
+        "fixed inset-x-0 bottom-0 z-40 border-t border-[#E8DDD4] bg-[#FFF8F2] px-2 pb-[max(env(safe-area-inset-bottom),0.5rem)] pt-2 shadow-[0_-8px_24px_rgb(0_0_0_/_0.04)] backdrop-blur md:hidden",
         className
       )}
     >
@@ -45,9 +45,11 @@ function MobileBottomNavigation({
               href={item.href}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "flex min-h-12 flex-col items-center justify-center gap-1 rounded-md px-2 text-xs font-medium text-muted-foreground transition-colors",
-                "hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/20 focus-visible:outline-none",
-                active && "bg-muted text-foreground"
+                "flex min-h-12 flex-col items-center justify-center gap-1 rounded-md px-2 text-xs font-medium transition-colors",
+                "focus-visible:ring-3 focus-visible:ring-[#E8623A]/20 focus-visible:outline-none",
+                active
+                  ? "text-[#E8623A] bg-[#FDE8DF]/50 font-semibold"
+                  : "text-[#8C7B6B] hover:bg-[#F5EFE8] hover:text-[#1C1612]"
               )}
             >
               <Icon className="size-5" />

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Cormorant_Garamond } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 
 import { Toaster } from "@/components/ui/toaster";
@@ -22,6 +22,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const cormorantGaramond = Cormorant_Garamond({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
 export const metadata: Metadata = baseMetadata;
 
 export default function RootLayout({
@@ -32,7 +39,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", geistSans.variable, geistMono.variable)}
+      className={cn(
+        "h-full",
+        geistSans.variable,
+        geistMono.variable,
+        cormorantGaramond.variable
+      )}
     >
       <body className="flex min-h-full flex-col antialiased">
         {children}

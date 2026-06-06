@@ -40,7 +40,7 @@ export function FavoriteButton({
       <Heart
         className={cn(
           "size-4 transition",
-          isFavorited && "fill-rose-500 text-rose-500"
+          isFavorited && "fill-[#E8623A] text-[#E8623A]"
         )}
       />
     </Button>

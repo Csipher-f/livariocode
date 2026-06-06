@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu } from "lucide-react";
 
+import { LivarioLogo } from "@/components/livario-logo";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -57,7 +58,9 @@ export function MobileMenu({
         side="right"
       >
         <SheetHeader>
-          <SheetTitle className="text-left text-xl">Livario</SheetTitle>
+          <SheetTitle className="text-left text-xl">
+            <LivarioLogo />
+          </SheetTitle>
         </SheetHeader>
         <nav aria-label="Mobile navigation" className="mt-4 grid gap-2">
           {links.map((link) => (

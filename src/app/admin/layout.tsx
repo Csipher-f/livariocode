@@ -11,7 +11,7 @@ export default async function AdminLayout({
   await requireAdmin();
 
   return (
-    <div className="min-h-screen bg-secondary/30 lg:flex">
+    <div className="min-h-screen bg-[#FDFAF7] lg:flex">
       <AdminNav />
       <div className="min-w-0 flex-1 pb-8">{children}</div>
     </div>

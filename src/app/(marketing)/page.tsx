@@ -58,14 +58,14 @@ export default async function MarketingHomePage() {
 
   return (
     <main>
-      <section className="relative isolate overflow-hidden">
-        <div className="absolute inset-x-0 top-0 -z-10 h-[34rem] bg-[radial-gradient(circle_at_50%_0%,oklch(0.94_0.02_190),transparent_58%)]" />
+      <section className="relative isolate overflow-hidden bg-[#FDFAF7]">
+        <div className="absolute inset-x-0 top-0 -z-10 h-136 bg-[radial-gradient(circle_at_50%_0%,oklch(0.94_0.02_190),transparent_58%)]" />
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-4 pb-16 pt-16 sm:px-6 sm:pb-20 sm:pt-20 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
             <Badge className="mb-5 bg-background/80 text-foreground shadow-sm backdrop-blur">
               Premium housing discovery
             </Badge>
-            <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl">
+            <h1 className="text-balance text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl font-serif">
               Find a home that feels right from the first look.
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-7 text-muted-foreground sm:text-lg">
@@ -147,7 +147,7 @@ export default async function MarketingHomePage() {
                 <p className="text-sm font-medium text-muted-foreground">
                   Featured listings
                 </p>
-                <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+                <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl font-serif">
                   Featured homes on Livario
                 </h2>
               </div>
@@ -169,13 +169,13 @@ export default async function MarketingHomePage() {
         </section>
       )}
 
-      <section className="bg-secondary/50 px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+      <section className="bg-[#FFF8F2] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-2xl">
             <p className="text-sm font-medium text-muted-foreground">
               Property types
             </p>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl font-serif">
               Search the way renters actually think.
             </h2>
           </div>
@@ -198,7 +198,7 @@ export default async function MarketingHomePage() {
       </section>
 
       <section
-        className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
+        className="bg-[#FDFAF7] px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
         id="how-it-works"
       >
         <div className="mx-auto max-w-7xl">
@@ -206,7 +206,7 @@ export default async function MarketingHomePage() {
             <p className="text-sm font-medium text-muted-foreground">
               How it works
             </p>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h2 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl font-serif">
               Three simple steps for tenants.
             </h2>
           </div>
@@ -237,21 +237,21 @@ export default async function MarketingHomePage() {
       </section>
 
       <section className="px-4 pb-16 sm:px-6 sm:pb-20 lg:px-8">
-        <div className="scroll-fade mx-auto max-w-7xl overflow-hidden rounded-3xl bg-primary px-6 py-12 text-primary-foreground sm:px-10 lg:px-14">
+        <div className="scroll-fade mx-auto max-w-7xl overflow-hidden rounded-3xl bg-[#1C1612] px-6 py-12 text-[#FDFAF7] sm:px-10 lg:px-14">
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
-              <p className="text-sm font-medium text-primary-foreground/70">
+              <p className="text-sm font-medium text-[#FDFAF7]/70">
                 For landlords
               </p>
-              <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
+              <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl font-serif">
                 Put your property in front of renters looking with intent.
               </h2>
-              <p className="mt-4 max-w-xl text-sm leading-6 text-primary-foreground/75 sm:text-base">
+              <p className="mt-4 max-w-xl text-sm leading-6 text-[#FDFAF7]/75 sm:text-base">
                 Start with a clean listing flow built for quality photos, simple
                 details, and better tenant conversations.
               </p>
             </div>
-            <Button asChild size="lg" variant="secondary">
+            <Button asChild size="lg">
               <Link href="/signup">
                 Start listing
                 <ArrowRight />

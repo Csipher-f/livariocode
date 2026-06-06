@@ -87,7 +87,7 @@ export function AvatarUpload({
         className="group relative cursor-pointer overflow-hidden rounded-full focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2"
         onClick={handleContainerClick}
       >
-        <Avatar className="size-24 border-2 border-border transition-all group-hover:opacity-85 sm:size-28">
+        <Avatar className="size-24 border-2 border-dashed border-[#E8DDD4] transition-colors group-hover:border-[#E8623A] group-hover:opacity-85 sm:size-28">
           {activeSrc ? (
             <AvatarImage alt="Avatar preview" src={activeSrc} />
           ) : null}

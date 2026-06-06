@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { LivarioLogo } from "@/components/livario-logo";
 import { getDashboardPathForRole } from "@/features/auth/utils/redirects";
 import { getAuthenticatedUser } from "@/supabase/auth";
 
@@ -48,10 +49,9 @@ export async function Navbar() {
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           aria-label="Livario home"
-          className="text-xl font-semibold tracking-tight"
           href="/"
         >
-          Livario
+          <LivarioLogo />
         </Link>
 
         <nav
