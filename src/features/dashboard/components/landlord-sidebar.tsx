@@ -8,7 +8,6 @@ import {
   Inbox,
   MessageCircle,
   PlusCircle,
-  Settings,
   User,
   Users,
 } from "lucide-react";
@@ -36,11 +35,6 @@ const landlordActiveItems = [
     href: "/dashboard/landlord/inquiries",
     label: "Inquiries",
     icon: Inbox,
-  },
-  {
-    href: "/settings",
-    label: "Settings",
-    icon: Settings,
   },
 ];
 

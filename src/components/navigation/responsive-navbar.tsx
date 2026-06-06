@@ -41,14 +41,12 @@ function ResponsiveNavbar({
     <header
       data-slot="responsive-navbar"
       className={cn(
-        "sticky top-0 z-40 border-b border-border/80 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/75",
+        "sticky top-0 z-40 border-b border-border/80 bg-background/90 backdrop-blur supports-backdrop-filter:bg-background/75",
         className
       )}
     >
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-        >
+        <Link href="/">
           <LivarioLogo />
         </Link>
 

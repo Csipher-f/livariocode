@@ -78,14 +78,18 @@ export function PropertyCard({
               {formatPrice(property.price, property.rentPeriod)}
             </p>
           </div>
-          <div className="mt-3 flex items-center justify-between text-sm text-foreground-muted border-t border-border/50 pt-2.5">
-            <span className="flex items-center gap-1">
+          <div className="mt-3 flex items-end justify-between text-sm text-foreground-muted border-t border-border/50 pt-2.5">
+            <span className="flex flex-col items-start gap-0.5">
               <BedDouble className="size-3.5 text-foreground-muted/70" />
-              {property.bedrooms ? `${property.bedrooms} beds` : "Studio"}
+              <span>
+                {property.bedrooms ? `${property.bedrooms} beds` : "Studio"}
+              </span>
             </span>
-            <span className="flex items-center gap-1">
+            <span className="flex flex-col items-end gap-0.5">
               <Bath className="size-3.5 text-foreground-muted/70" />
-              {property.bathrooms ? `${property.bathrooms} baths` : "Baths"}
+              <span>
+                {property.bathrooms ? `${property.bathrooms} baths` : "Baths"}
+              </span>
             </span>
           </div>
         </Link>

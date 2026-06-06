@@ -3,7 +3,13 @@
 import { useTransition } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LogOut, Menu, Settings, ShieldCheck, type LucideIcon } from "lucide-react";
+import {
+  LogOut,
+  Menu,
+  Settings,
+  ShieldCheck,
+  type LucideIcon,
+} from "lucide-react";
 
 import { logout } from "@/actions/auth";
 import { LivarioLogo } from "@/components/livario-logo";
@@ -165,8 +171,9 @@ function DrawerLink({
   return (
     <Link
       className={cn(
-        "flex min-h-12 items-center gap-3 rounded-md px-3 text-sm font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white",
-        isActive && "bg-white text-zinc-950 hover:bg-white hover:text-zinc-950"
+        "flex min-h-12 items-center gap-3 rounded-md px-3 text-sm font-medium text-[#8C7B6B] transition hover:bg-[#F5EFE8] hover:text-[#1C1612]",
+        isActive &&
+          "bg-[#FDE8DF] text-[#E8623A] hover:bg-[#FDE8DF] hover:text-[#E8623A]"
       )}
       href={item.href}
     >
@@ -282,7 +289,7 @@ export function DashboardNav({
       </aside>
 
       <header className="sticky top-0 z-40 border-b border-[#E8DDD4] bg-[#FFF8F2]/95 px-4 py-3 backdrop-blur lg:hidden">
-        <div className="mx-auto flex max-w-md items-center justify-between gap-3">
+        <div className="flex w-full items-center justify-between">
           <Link href="/">
             <LivarioLogo />
           </Link>
@@ -298,12 +305,12 @@ export function DashboardNav({
               </Button>
             </SheetTrigger>
             <SheetContent
-              className="w-[min(22rem,88vw)] gap-4 border-zinc-800 bg-zinc-950 p-4 text-white sm:p-5 [&_[data-slot=sheet-overlay]]:bg-black/70"
+              className="w-[min(22rem,88vw)] gap-4 border-[#E8DDD4] bg-[#FFF8F2] p-4 text-[#1C1612] sm:p-5 **:data-[slot=sheet-overlay]:bg-black/70"
               side="left"
             >
-              <SheetHeader className="border-b border-white/10 pb-4">
-                <SheetTitle className="text-left text-xl text-white">
-                  <LivarioLogo variant="light" />
+              <SheetHeader className="border-b border-[#E8DDD4] pb-4">
+                <SheetTitle className="text-left text-xl">
+                  <LivarioLogo />
                 </SheetTitle>
               </SheetHeader>
 
@@ -319,14 +326,13 @@ export function DashboardNav({
                   />
                 ))}
 
-                <div className="my-2 h-px bg-white/10" />
+                <div className="my-2 h-px bg-[#E8DDD4]" />
 
                 {comingSoonItems.map((item) => {
                   const Icon = item.icon;
-
                   return (
                     <button
-                      className="flex min-h-12 items-center gap-3 rounded-md px-3 text-left text-sm font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white focus-visible:ring-3 focus-visible:ring-white/20 focus-visible:outline-none"
+                      className="flex min-h-12 items-center gap-3 rounded-md px-3 text-left text-sm font-medium text-[#8C7B6B] transition hover:bg-[#F5EFE8] hover:text-[#1C1612] focus-visible:ring-3 focus-visible:ring-[#E8623A]/20 focus-visible:outline-none"
                       key={item.label}
                       onClick={showComingSoonToast}
                       type="button"
@@ -338,7 +344,7 @@ export function DashboardNav({
                 })}
 
                 <button
-                  className="flex min-h-12 items-center gap-3 rounded-md px-3 text-left text-sm font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white focus-visible:ring-3 focus-visible:ring-white/20 focus-visible:outline-none"
+                  className="flex min-h-12 items-center gap-3 rounded-md px-3 text-left text-sm font-medium text-[#8C7B6B] transition hover:bg-[#F5EFE8] hover:text-[#1C1612] focus-visible:ring-3 focus-visible:ring-[#E8623A]/20 focus-visible:outline-none"
                   disabled={isSigningOut}
                   onClick={handleSignOut}
                   type="button"
@@ -351,24 +357,25 @@ export function DashboardNav({
               <div className="mt-auto flex flex-col gap-3">
                 <Link
                   className={cn(
-                    "flex min-h-12 items-center gap-3 rounded-md px-3 text-sm font-medium text-zinc-300 transition hover:bg-white/10 hover:text-white",
-                    pathname.startsWith("/settings") && "bg-white text-zinc-950 hover:bg-white hover:text-zinc-950"
+                    "flex min-h-12 items-center gap-3 rounded-md px-3 text-sm font-medium text-[#8C7B6B] transition hover:bg-[#F5EFE8] hover:text-[#1C1612]",
+                    pathname.startsWith("/settings") &&
+                      "bg-[#FDE8DF] text-[#E8623A] font-medium"
                   )}
                   href="/settings"
                 >
                   <Settings className="size-4" />
                   Settings
                 </Link>
-                <div className="rounded-md border border-white/10 bg-white/5 p-3">
+                <div className="rounded-md border border-[#E8DDD4] bg-[#F5EFE8] p-3">
                   <div className="flex items-center gap-3">
-                    <div className="flex size-10 items-center justify-center rounded-full bg-white text-zinc-950">
+                    <div className="flex size-10 items-center justify-center rounded-full bg-[#FDE8DF] text-[#E8623A]">
                       <ShieldCheck className="size-4" />
                     </div>
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">
+                      <p className="truncate text-sm font-medium text-[#1C1612]">
                         {getAccountLabel(profile)}
                       </p>
-                      <p className="truncate text-xs capitalize text-zinc-400">
+                      <p className="truncate text-xs capitalize text-[#8C7B6B]">
                         active role: {profile.active_role}
                       </p>
                     </div>
