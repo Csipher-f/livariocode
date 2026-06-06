@@ -31,19 +31,18 @@ export function PropertyCard({
     : "Location pending";
 
   return (
-    <Card className="group overflow-hidden border-border/80 bg-card shadow-sm transition-all duration-300 sm:hover:-translate-y-1 sm:hover:shadow-md">
+    <Card className="group isolate overflow-hidden border-border/80 bg-card shadow-sm transition-all duration-300 sm:hover:-translate-y-1 sm:hover:shadow-md">
       <div className="relative">
         <Link
           aria-label={`View ${property.title}`}
           className="block"
           href={`/listings/${property.id}`}
         >
-          <div className="overflow-hidden bg-secondary">
+          <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
             <Image
               alt=""
-              className="w-full object-cover transition-transform duration-500 sm:group-hover:scale-[1.03]"
-              width={400}
-              height={300}
+              className="object-cover transition-transform duration-500 sm:group-hover:scale-[1.03]"
+              fill
               placeholder="blur"
               blurDataURL={propertyBlurDataUrl}
               priority={priority}
