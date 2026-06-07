@@ -26,7 +26,7 @@ export default async function LandlordPropertiesPage() {
   const result = await getLandlordProperties(user.id);
 
   return (
-    <main className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:px-8">
+    <main className="mx-auto grid w-full max-w-7xl gap-8 overflow-x-hidden px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-medium text-muted-foreground">
@@ -69,7 +69,9 @@ export default async function LandlordPropertiesPage() {
                   </Badge>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">
-                  <span>{formatPrice(property.price, property.rentPeriod)}</span>
+                  <span>
+                    {formatPrice(property.price, property.rentPeriod)}
+                  </span>
                   <span>
                     Created {dateFormatter.format(new Date(property.createdAt))}
                   </span>

@@ -23,7 +23,7 @@ function PropertyCardSkeleton() {
 
 export default function TenantDashboardLoading() {
   return (
-    <main className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:px-8">
+    <main className="mx-auto grid w-full max-w-7xl gap-8 overflow-x-hidden px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <Skeleton className="h-4 w-32" />

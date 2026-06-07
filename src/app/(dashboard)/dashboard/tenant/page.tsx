@@ -134,7 +134,7 @@ export default async function TenantDashboardPage() {
   const hasActivity = savedResult.totalCount > 0 || inquiryCount > 0;
 
   return (
-    <main className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:px-8">
+    <main className="mx-auto grid w-full max-w-7xl gap-8 overflow-x-hidden px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-medium text-muted-foreground">
@@ -166,11 +166,7 @@ export default async function TenantDashboardPage() {
           label="Saved Listings"
           value={savedResult.totalCount}
         />
-        <SummaryCard
-          icon={Inbox}
-          label="Inquiries Sent"
-          value={inquiryCount}
-        />
+        <SummaryCard icon={Inbox} label="Inquiries Sent" value={inquiryCount} />
       </div>
 
       {hasActivity ? (
