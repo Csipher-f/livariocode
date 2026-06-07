@@ -6,6 +6,10 @@ export type PropertyStatus = "draft" | "published" | "archived" | "rented";
 
 export type InquiryStatus = "pending" | "read" | "responded" | "closed";
 
+export type TenancyVerificationSource = "manual" | "payment" | "admin";
+
+export type ReviewStatus = "pending" | "published" | "hidden";
+
 export type Profile = {
   id: string;
   email: string | null;
@@ -82,6 +86,33 @@ export type InquiryReply = {
   sender_id: string;
   message: string;
   created_at: string;
+};
+
+export type PropertyTenancy = {
+  id: string;
+  property_id: string;
+  tenant_id: string;
+  landlord_id: string;
+  is_verified: boolean;
+  verified_at: string | null;
+  verification_source: TenancyVerificationSource | null;
+  starts_on: string | null;
+  ends_on: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type PropertyReview = {
+  id: string;
+  property_id: string;
+  tenancy_id: string;
+  reviewer_id: string;
+  rating: number;
+  title: string | null;
+  body: string | null;
+  status: ReviewStatus;
+  created_at: string;
+  updated_at: string;
 };
 
 export type Database = {
@@ -234,6 +265,57 @@ export type Database = {
         };
         Relationships: [];
       };
+      property_tenancies: {
+        Row: PropertyTenancy;
+        Insert: {
+          id?: string;
+          property_id: string;
+          tenant_id: string;
+          landlord_id: string;
+          is_verified?: boolean;
+          verified_at?: string | null;
+          verification_source?: TenancyVerificationSource | null;
+          starts_on?: string | null;
+          ends_on?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          property_id?: string;
+          tenant_id?: string;
+          landlord_id?: string;
+          is_verified?: boolean;
+          verified_at?: string | null;
+          verification_source?: TenancyVerificationSource | null;
+          starts_on?: string | null;
+          ends_on?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      property_reviews: {
+        Row: PropertyReview;
+        Insert: {
+          id?: string;
+          property_id: string;
+          tenancy_id: string;
+          reviewer_id: string;
+          rating: number;
+          title?: string | null;
+          body?: string | null;
+          status?: ReviewStatus;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          rating?: number;
+          title?: string | null;
+          body?: string | null;
+          status?: ReviewStatus;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -242,6 +324,8 @@ export type Database = {
       property_status: PropertyStatus;
       inquiry_status: InquiryStatus;
       rent_period: "monthly" | "six_months" | "yearly";
+      tenancy_verification_source: TenancyVerificationSource;
+      review_status: ReviewStatus;
     };
     CompositeTypes: Record<string, never>;
   };

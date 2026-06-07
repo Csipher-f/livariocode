@@ -7,8 +7,10 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getPublishedPropertyById } from "@/features/properties/actions/get-property";
+import { getPublishedPropertyReviews } from "@/features/properties/actions/get-property-reviews";
 import { LandlordCard } from "@/features/properties/components/landlord-card";
 import { PropertyInfo } from "@/features/properties/components/property-info";
+import { PropertyReviews } from "@/features/properties/components/property-reviews";
 import { createPageMetadata } from "@/lib/metadata";
 import { getCurrentUser } from "@/supabase/auth";
 
@@ -70,8 +72,9 @@ export default async function PropertyDetailPage({
   params,
 }: PropertyPageProps) {
   const { id } = await params;
-  const [property, user] = await Promise.all([
+  const [property, reviewsSummary, user] = await Promise.all([
     getPublishedPropertyById(id),
+    getPublishedPropertyReviews(id),
     getCurrentUser(),
   ]);
 
@@ -94,7 +97,10 @@ export default async function PropertyDetailPage({
         <PropertyGallery images={property.images} title={property.title} />
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
-          <PropertyInfo property={property} />
+          <div className="grid gap-8">
+            <PropertyInfo property={property} />
+            <PropertyReviews reviewsSummary={reviewsSummary} />
+          </div>
           <LandlordCard isAuthenticated={Boolean(user)} property={property} />
         </div>
       </section>
