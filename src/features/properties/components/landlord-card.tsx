@@ -1,4 +1,5 @@
 import { CalendarDays, ShieldCheck } from "lucide-react";
+import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
@@ -57,6 +58,12 @@ export function LandlordCard({
                 <CalendarDays className="size-4 shrink-0" />
                 <span>{getMemberSince(property.landlord.createdAt)}</span>
               </p>
+              <Link
+                href={`/landlords/${property.ownerId}`}
+                className="mt-2 inline-block text-sm text-[#E8623A] hover:text-[#C44D28] font-medium transition-colors"
+              >
+                View all listings by {landlordName}
+              </Link>
             </div>
           </div>
 
