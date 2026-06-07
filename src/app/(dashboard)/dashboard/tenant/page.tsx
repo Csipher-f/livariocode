@@ -34,18 +34,9 @@ function getFirstName(fullName: string | null) {
 }
 
 function getStatusVariant(status: InquiryStatus) {
-  if (status === "pending") {
-    return "warning";
-  }
-
-  if (status === "responded") {
-    return "success";
-  }
-
-  if (status === "closed") {
-    return "secondary";
-  }
-
+  if (status === "pending") return "warning";
+  if (status === "responded") return "success";
+  if (status === "closed") return "secondary";
   return "outline";
 }
 
@@ -59,14 +50,18 @@ function SummaryCard({
   value: number;
 }) {
   return (
-    <Card>
-      <CardContent className="flex items-center justify-between gap-4 p-5">
-        <div>
-          <p className="text-sm text-muted-foreground">{label}</p>
-          <p className="mt-2 text-3xl font-semibold tracking-tight">{value}</p>
+    <Card className="w-full min-w-0">
+      <CardContent className="flex items-center justify-between gap-2 p-4">
+        <div className="min-w-0">
+          <p className="truncate text-xs text-muted-foreground sm:text-sm">
+            {label}
+          </p>
+          <p className="mt-1 text-2xl font-semibold tracking-tight sm:mt-2 sm:text-3xl">
+            {value}
+          </p>
         </div>
-        <div className="flex size-11 items-center justify-center rounded-full bg-secondary text-muted-foreground">
-          <Icon className="size-5" />
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-muted-foreground sm:size-11">
+          <Icon className="size-4 sm:size-5" />
         </div>
       </CardContent>
     </Card>
@@ -117,13 +112,8 @@ export default async function TenantDashboardPage() {
   const user = await requireUser();
   const profile = await getCurrentProfile();
 
-  if (!profile) {
-    redirect("/onboarding");
-  }
-
-  if (profile.active_role !== "tenant") {
-    redirect("/dashboard");
-  }
+  if (!profile) redirect("/onboarding");
+  if (profile.active_role !== "tenant") redirect("/dashboard");
 
   const [savedResult, recentInquiries, inquiryCount] = await Promise.all([
     getFavoriteProperties({ page: 1, userId: user.id }),
@@ -160,7 +150,7 @@ export default async function TenantDashboardPage() {
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-3">
         <SummaryCard
           icon={Heart}
           label="Saved Listings"
