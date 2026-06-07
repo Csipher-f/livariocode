@@ -18,13 +18,13 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFAF7] lg:flex">
+    <div className="min-h-screen overflow-x-hidden bg-[#FDFAF7] lg:flex">
       {profile.active_role === "landlord" ? (
         <LandlordSidebar profile={profile} />
       ) : (
         <TenantSidebar profile={profile} />
       )}
-      <div className="min-w-0 flex-1 pb-20 lg:pb-0">{children}</div>
+      <div className="min-w-0 w-full flex-1 pb-20 lg:pb-0">{children}</div>
     </div>
   );
 }
