@@ -46,7 +46,7 @@ export default function RootLayout({
         cormorantGaramond.variable
       )}
     >
-      <body className="flex min-h-full flex-col antialiased">
+      <body className="flex min-h-full flex-col overflow-x-hidden antialiased">
         {children}
         <Toaster />
         <Analytics />
