@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Building2, Inbox, UserPlus, Users } from "lucide-react";
+import { Building2, Inbox, Star, UserPlus, Users } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAdminOverviewStats } from "@/features/admin/actions/get-admin-data";
@@ -36,6 +36,11 @@ export default async function AdminOverviewPage() {
       value: stats.newUsersThisWeek,
       icon: UserPlus,
     },
+    {
+      label: "Pending reviews",
+      value: stats.pendingReviews,
+      icon: Star,
+    },
   ];
 
   return (
@@ -49,7 +54,7 @@ export default async function AdminOverviewPage() {
         </h1>
       </div>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {cards.map((card) => {
           const Icon = card.icon;
 

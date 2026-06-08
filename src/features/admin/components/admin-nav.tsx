@@ -11,6 +11,7 @@ import {
   Inbox,
   Menu,
   Shield,
+  Star,
   Users,
 } from "lucide-react";
 
@@ -32,6 +33,7 @@ const adminItems = [
   { href: "/admin/properties", label: "Properties", icon: Building2 },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/inquiries", label: "Inquiries", icon: Inbox },
+  { href: "/admin/reviews", label: "Reviews", icon: Star },
 ];
 
 function isActive(pathname: string, href: string) {

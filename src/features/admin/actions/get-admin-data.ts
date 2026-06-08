@@ -13,6 +13,7 @@ export type AdminOverviewStats = {
   totalUsers: number;
   totalInquiries: number;
   newUsersThisWeek: number;
+  pendingReviews: number;
 };
 
 export type AdminPropertyRow = {
@@ -99,6 +100,7 @@ export async function getAdminOverviewStats(): Promise<AdminOverviewStats> {
     users,
     inquiries,
     newUsersThisWeek,
+    pendingReviews,
   ] = await Promise.all([
     supabase
       .from("properties")
@@ -110,6 +112,10 @@ export async function getAdminOverviewStats(): Promise<AdminOverviewStats> {
       .from("profiles")
       .select("id", { count: "exact", head: true })
       .gte("created_at", sevenDaysAgo.toISOString()),
+    supabase
+      .from("property_reviews")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending"),
   ]);
 
   return {
@@ -117,6 +123,7 @@ export async function getAdminOverviewStats(): Promise<AdminOverviewStats> {
     totalUsers: users.count ?? 0,
     totalInquiries: inquiries.count ?? 0,
     newUsersThisWeek: newUsersThisWeek.count ?? 0,
+    pendingReviews: pendingReviews.count ?? 0,
   };
 }
 
