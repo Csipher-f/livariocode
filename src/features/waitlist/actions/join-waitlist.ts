@@ -34,6 +34,8 @@ export async function joinWaitlist(input: JoinWaitlistInput): Promise<{
   });
 
   if (error) {
+    console.error("Waitlist join error FULL:", JSON.stringify(error));
+
     if (error.code === "23505") {
       return {
         success: true,
@@ -41,7 +43,6 @@ export async function joinWaitlist(input: JoinWaitlistInput): Promise<{
       };
     }
 
-    console.error("Waitlist join error:", error);
     return {
       success: false,
       message: "Something went wrong, please try again.",

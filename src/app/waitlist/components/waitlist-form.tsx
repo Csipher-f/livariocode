@@ -48,9 +48,9 @@ export function WaitlistForm({ role, buttonLabel }: WaitlistFormProps) {
         <div className="flex size-12 items-center justify-center rounded-full bg-[#FDE8DF]">
           <Check className="size-6 text-[#E8623A]" />
         </div>
-        <h3 className="mt-4 text-lg font-semibold">You're on the list!</h3>
+        <h3 className="mt-4 text-lg font-semibold">You&apos;re on the list!</h3>
         <p className="mt-1 text-sm text-[#8C7B6B]">
-          We'll reach out soon with your early access details.
+          We&apos;ll reach out soon with your early access details.
         </p>
       </div>
     );
