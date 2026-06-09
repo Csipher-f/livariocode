@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 
 import { DashboardNav } from "@/features/dashboard/components/dashboard-nav";
-import type { Profile } from "@/types/database";
 import type { Notification } from "@/features/notifications/actions/get-notifications";
+import type { Profile } from "@/types/database";
 
 const tenantActiveItems = [
   {
@@ -41,9 +41,9 @@ const tenantActiveItems = [
 
 const tenantBottomItems = [
   {
-    href: "/listings",
-    label: "Browse",
-    icon: Search,
+    href: "/dashboard/tenant",
+    label: "Dashboard",
+    icon: Home,
   },
   {
     href: "/dashboard/tenant/saved",

@@ -37,3 +37,5 @@ CREATE POLICY "Service role can insert notifications"
   WITH CHECK (true);
 
 GRANT SELECT, UPDATE ON public.notifications TO authenticated;
+
+GRANT INSERT ON public.notifications TO authenticated;
