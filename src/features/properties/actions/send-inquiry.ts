@@ -3,6 +3,7 @@
 import { z } from "zod";
 
 import { createClient } from "@/supabase/server-client";
+import { createNotification } from "@/features/notifications/actions/create-notification";
 
 const inquirySchema = z.object({
   propertyId: z.string().uuid(),
@@ -22,6 +23,7 @@ export type SendInquiryState =
 type InquiryPropertyRow = {
   id: string;
   owner_id: string;
+  title: string;
   status: "published";
 };
 
@@ -79,7 +81,7 @@ export async function sendInquiry(input: {
 
   const { data: property, error: propertyError } = await supabase
     .from("properties")
-    .select("id,owner_id,status")
+    .select("id,owner_id,title,status")
     .eq("id", parsedInput.data.propertyId)
     .eq("status", "published")
     .maybeSingle();
@@ -104,22 +106,35 @@ export async function sendInquiry(input: {
     };
   }
 
-  const { error: inquiryError } = await supabase.from("inquiries").insert({
-    property_id: publishedProperty.id,
-    sender_id: user.id,
-    recipient_id: publishedProperty.owner_id,
-    message: parsedInput.data.message,
-    status: "pending",
-  });
+  const { data: newInquiry, error: inquiryError } = await supabase
+    .from("inquiries")
+    .insert({
+      property_id: publishedProperty.id,
+      sender_id: user.id,
+      recipient_id: publishedProperty.owner_id,
+      message: parsedInput.data.message,
+      status: "pending",
+    })
+    .select("id")
+    .single();
 
-  if (inquiryError) {
-    console.error("Inquiry insert failed", inquiryError.message);
+  if (inquiryError || !newInquiry) {
+    console.error("Inquiry insert failed", inquiryError?.message);
 
     return {
       success: false,
       message: "We could not send your inquiry right now. Please try again.",
     };
   }
+
+  createNotification({
+    userId: publishedProperty.owner_id,
+    type: "new_inquiry",
+    title: "New inquiry received",
+    body: `A tenant has sent you an inquiry about ${publishedProperty.title}`,
+    resourceId: newInquiry.id,
+    resourceType: "inquiry",
+  });
 
   return {
     success: true,

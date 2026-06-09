@@ -14,6 +14,7 @@ import {
 
 import { DashboardNav } from "@/features/dashboard/components/dashboard-nav";
 import type { Profile } from "@/types/database";
+import type { Notification } from "@/features/notifications/actions/get-notifications";
 
 const tenantActiveItems = [
   {
@@ -80,7 +81,15 @@ const tenantComingSoonItems = [
   },
 ];
 
-export function TenantSidebar({ profile }: { profile: Profile }) {
+export function TenantSidebar({
+  profile,
+  unreadCount = 0,
+  notifications = [],
+}: {
+  profile: Profile;
+  unreadCount?: number;
+  notifications?: Notification[];
+}) {
   return (
     <DashboardNav
       activeItems={tenantActiveItems}
@@ -88,6 +97,8 @@ export function TenantSidebar({ profile }: { profile: Profile }) {
       comingSoonItems={tenantComingSoonItems}
       profile={profile}
       title="Tenant dashboard"
+      unreadCount={unreadCount}
+      notifications={notifications}
     />
   );
 }

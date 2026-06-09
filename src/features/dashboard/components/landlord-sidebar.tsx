@@ -14,6 +14,7 @@ import {
 
 import { DashboardNav } from "@/features/dashboard/components/dashboard-nav";
 import type { Profile } from "@/types/database";
+import type { Notification } from "@/features/notifications/actions/get-notifications";
 
 const landlordActiveItems = [
   {
@@ -84,7 +85,15 @@ const landlordComingSoonItems = [
   },
 ];
 
-export function LandlordSidebar({ profile }: { profile: Profile }) {
+export function LandlordSidebar({
+  profile,
+  unreadCount = 0,
+  notifications = [],
+}: {
+  profile: Profile;
+  unreadCount?: number;
+  notifications?: Notification[];
+}) {
   return (
     <DashboardNav
       activeItems={landlordActiveItems}
@@ -92,6 +101,8 @@ export function LandlordSidebar({ profile }: { profile: Profile }) {
       comingSoonItems={landlordComingSoonItems}
       profile={profile}
       title="Landlord dashboard"
+      unreadCount={unreadCount}
+      notifications={notifications}
     />
   );
 }

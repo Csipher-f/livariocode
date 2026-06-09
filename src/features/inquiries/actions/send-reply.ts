@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/supabase/server-client";
 import { getAuthenticatedUser } from "@/supabase/auth";
+import { createNotification } from "@/features/notifications/actions/create-notification";
 import type { ReplyWithProfile } from "./get-inquiry-thread";
 
 const replySchema = z.object({
@@ -49,7 +50,7 @@ export async function sendReply(input: {
   // Fetch parent inquiry to verify membership and status
   const { data: inquiry, error: inquiryError } = await supabase
     .from("inquiries")
-    .select("id, sender_id, recipient_id, status")
+    .select("id, sender_id, recipient_id, status, property_id")
     .eq("id", inquiryId)
     .maybeSingle();
 
@@ -105,6 +106,26 @@ export async function sendReply(input: {
   if (statusError) {
     console.error("Failed to update parent inquiry status", statusError.message);
   }
+
+  // Determine who should be notified about the reply
+  const isSenderTenant = inquiry.sender_id === authSession.user.id;
+  const notifyUserId = isSenderTenant ? inquiry.recipient_id : inquiry.sender_id;
+
+  // Fetch property title for notification
+  const { data: replyProperty } = await supabase
+    .from("properties")
+    .select("title")
+    .eq("id", inquiry.property_id)
+    .maybeSingle();
+
+  createNotification({
+    userId: notifyUserId,
+    type: "inquiry_reply",
+    title: "New reply to your inquiry",
+    body: `${authSession.profile.full_name ?? "Someone"} replied to your inquiry about ${replyProperty?.title ?? "a property"}`,
+    resourceId: inquiryId,
+    resourceType: "inquiry",
+  });
 
   // Revalidate paths
   revalidatePath(`/dashboard/tenant/inquiries`);

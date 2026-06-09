@@ -15,6 +15,8 @@ import { logout } from "@/actions/auth";
 import { LivarioLogo } from "@/components/livario-logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { NotificationBell } from "@/features/notifications/components/notification-bell";
+import type { Notification } from "@/features/notifications/actions/get-notifications";
 import {
   Sheet,
   SheetContent,
@@ -215,12 +217,16 @@ export function DashboardNav({
   comingSoonItems,
   profile,
   title,
+  unreadCount = 0,
+  notifications = [],
 }: {
   activeItems: DashboardNavItem[];
   bottomItems: DashboardNavItem[];
   comingSoonItems: DashboardComingSoonItem[];
   profile: Profile;
   title: string;
+  unreadCount?: number;
+  notifications?: Notification[];
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -250,9 +256,17 @@ export function DashboardNav({
     <>
       <aside className="hidden w-72 shrink-0 border-r border-[#E8DDD4] bg-[#FFF8F2] lg:flex lg:min-h-screen lg:flex-col">
         <div className="border-b border-[#E8DDD4] p-6">
-          <Link href="/">
-            <LivarioLogo />
-          </Link>
+          <div className="flex items-center justify-between">
+            <Link href="/">
+              <LivarioLogo />
+            </Link>
+            <NotificationBell
+              userId={profile.id}
+              initialUnreadCount={unreadCount}
+              initialNotifications={notifications}
+              activeRole={profile.active_role}
+            />
+          </div>
           <p className="mt-1 text-sm text-[#8C7B6B]">{title}</p>
         </div>
 
@@ -294,7 +308,14 @@ export function DashboardNav({
             <LivarioLogo />
           </Link>
 
-          <Sheet>
+          <div className="flex items-center gap-2">
+            <NotificationBell
+              userId={profile.id}
+              initialUnreadCount={unreadCount}
+              initialNotifications={notifications}
+              activeRole={profile.active_role}
+            />
+            <Sheet>
             <SheetTrigger asChild>
               <Button
                 aria-label="Open dashboard menu"
@@ -384,6 +405,7 @@ export function DashboardNav({
               </div>
             </SheetContent>
           </Sheet>
+          </div>
         </div>
       </header>
 

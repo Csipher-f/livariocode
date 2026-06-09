@@ -10,6 +10,8 @@ export type TenancyVerificationSource = "manual" | "payment" | "admin";
 
 export type ReviewStatus = "pending" | "published" | "hidden";
 
+export type NotificationType = "new_inquiry" | "inquiry_reply" | "inquiry_closed";
+
 export type Profile = {
   id: string;
   email: string | null;
@@ -113,6 +115,18 @@ export type PropertyReview = {
   status: ReviewStatus;
   created_at: string;
   updated_at: string;
+};
+
+export type NotificationRow = {
+  id: string;
+  user_id: string;
+  type: NotificationType;
+  title: string;
+  body: string;
+  is_read: boolean;
+  resource_id: string | null;
+  resource_type: string | null;
+  created_at: string;
 };
 
 export type Database = {
@@ -316,6 +330,24 @@ export type Database = {
         };
         Relationships: [];
       };
+      notifications: {
+        Row: NotificationRow;
+        Insert: {
+          id?: string;
+          user_id: string;
+          type: NotificationType;
+          title: string;
+          body: string;
+          is_read?: boolean;
+          resource_id?: string | null;
+          resource_type?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          is_read?: boolean;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -323,6 +355,7 @@ export type Database = {
       active_role: ActiveRole;
       property_status: PropertyStatus;
       inquiry_status: InquiryStatus;
+      notification_type: NotificationType;
       rent_period: "monthly" | "six_months" | "yearly";
       tenancy_verification_source: TenancyVerificationSource;
       review_status: ReviewStatus;
