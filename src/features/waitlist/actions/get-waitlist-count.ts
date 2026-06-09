@@ -1,13 +1,16 @@
 "use server";
 
-import { createClient } from "@/supabase/server-client";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 export async function getWaitlistCount(): Promise<{
   total: number;
   tenants: number;
   landlords: number;
 }> {
-  const supabase = await createClient();
+  const supabase = createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   const { count: total } = await supabase
     .from("waitlist_entries")
