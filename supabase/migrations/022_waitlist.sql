@@ -41,3 +41,15 @@ CREATE POLICY "Admins can read waitlist"
 -- Grant insert to anon so unauthenticated users can join
 GRANT INSERT ON waitlist_entries TO anon;
 GRANT SELECT ON waitlist_entries TO authenticated;
+
+SELECT * FROM waitlist_entries LIMIT 5;
+
+GRANT INSERT ON waitlist_entries TO anon;
+GRANT INSERT ON waitlist_entries TO authenticated;
+GRANT SELECT ON waitlist_entries TO authenticated;
+GRANT SELECT ON waitlist_entries TO anon;
+
+CREATE POLICY "Public can read waitlist count"
+  ON waitlist_entries FOR SELECT
+  TO anon
+  USING (true);
