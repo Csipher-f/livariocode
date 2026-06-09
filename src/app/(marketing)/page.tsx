@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { createPageMetadata } from "@/lib/metadata";
 import { getPublishedProperties } from "@/features/properties/actions/get-properties";
 import { PropertyCard } from "@/features/properties/components/property-card";
+import { WaitlistSection } from "@/components/sections/waitlist-section";
 
 export const revalidate = 300;
 
@@ -235,6 +236,8 @@ export default async function MarketingHomePage() {
           </div>
         </div>
       </section>
+
+      <WaitlistSection />
 
       <section className="px-4 pb-16 sm:px-6 sm:pb-20 lg:px-8">
         <div className="scroll-fade mx-auto max-w-7xl overflow-hidden rounded-3xl bg-[#1C1612] px-6 py-12 text-[#FDFAF7] sm:px-10 lg:px-14">

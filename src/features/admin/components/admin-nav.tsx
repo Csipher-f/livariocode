@@ -13,6 +13,7 @@ import {
   Shield,
   Star,
   Users,
+  Users2,
 } from "lucide-react";
 
 import { LivarioLogo } from "@/components/livario-logo";
@@ -34,6 +35,7 @@ const adminItems = [
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/inquiries", label: "Inquiries", icon: Inbox },
   { href: "/admin/reviews", label: "Reviews", icon: Star },
+  { href: "/admin/waitlist", label: "Waitlist", icon: Users2 },
 ];
 
 function isActive(pathname: string, href: string) {

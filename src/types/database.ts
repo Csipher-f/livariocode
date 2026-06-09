@@ -1,6 +1,7 @@
 import type { ACTIVE_ROLES } from "@/constants/user-roles";
 
 export type ActiveRole = (typeof ACTIVE_ROLES)[number];
+export type WaitlistRole = "tenant" | "landlord";
 
 export type PropertyStatus = "draft" | "published" | "archived" | "rented";
 
@@ -348,6 +349,24 @@ export type Database = {
         };
         Relationships: [];
       };
+      waitlist_entries: {
+        Row: {
+          id: string;
+          email: string;
+          full_name: string | null;
+          role: WaitlistRole;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          email: string;
+          full_name?: string | null;
+          role: WaitlistRole;
+          created_at?: string;
+        };
+        Update: Record<string, never>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -359,6 +378,7 @@ export type Database = {
       rent_period: "monthly" | "six_months" | "yearly";
       tenancy_verification_source: TenancyVerificationSource;
       review_status: ReviewStatus;
+      waitlist_role: WaitlistRole;
     };
     CompositeTypes: Record<string, never>;
   };

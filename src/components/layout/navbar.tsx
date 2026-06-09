@@ -18,6 +18,7 @@ import { getAuthenticatedUser } from "@/supabase/auth";
 const publicLinks = [
   { href: "/listings", label: "Browse" },
   { href: "/#how-it-works", label: "How it works" },
+  { href: "/waitlist", label: "Join Waitlist" },
 ] as const;
 
 function getInitials(name?: string | null, email?: string | null) {
