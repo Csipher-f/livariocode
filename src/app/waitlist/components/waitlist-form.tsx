@@ -16,7 +16,7 @@ type WaitlistFormProps = {
 
 export function WaitlistForm({ role, buttonLabel }: WaitlistFormProps) {
   const [isPending, startTransition] = useTransition();
-  const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -34,7 +34,7 @@ export function WaitlistForm({ role, buttonLabel }: WaitlistFormProps) {
       });
 
       if (result.success) {
-        setSuccess(true);
+        setSuccessMessage(result.message);
         formRef.current?.reset();
       } else {
         setError(result.message);
@@ -42,15 +42,21 @@ export function WaitlistForm({ role, buttonLabel }: WaitlistFormProps) {
     });
   }
 
-  if (success) {
+  if (successMessage) {
+    const isAlreadyOnList = successMessage === "You're already on the list";
+
     return (
       <div className="flex flex-col items-center justify-center py-8 text-center">
         <div className="flex size-12 items-center justify-center rounded-full bg-[#FDE8DF]">
           <Check className="size-6 text-[#E8623A]" />
         </div>
-        <h3 className="mt-4 text-lg font-semibold">You&apos;re on the list!</h3>
+        <h3 className="mt-4 text-lg font-semibold">
+          {isAlreadyOnList ? "Already registered!" : "You\u2019re on the list!"}
+        </h3>
         <p className="mt-1 text-sm text-[#8C7B6B]">
-          We&apos;ll reach out soon with your early access details.
+          {isAlreadyOnList
+            ? "This email is already on the waitlist. We\u2019ll be in touch soon."
+            : "We\u2019ll reach out soon with your early access details."}
         </p>
       </div>
     );
