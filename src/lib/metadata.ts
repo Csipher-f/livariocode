@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://livario.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://livario.com.ng"
 const defaultTitle = "Livario";
 const defaultDescription =
   "Discover premium rentals and list quality homes across Nigeria with Livario.";
-const defaultOgImage = "/images/listings/listing-1.svg";
+const defaultOgImage = "/opengraph-image.png";
 
 export const baseMetadata: Metadata = {
   metadataBase: new URL(siteUrl),
