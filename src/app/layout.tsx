@@ -29,7 +29,11 @@ const cormorantGaramond = Cormorant_Garamond({
   display: "swap",
 });
 
-export const metadata: Metadata = baseMetadata;
+// Merging your base metadata with the correct metadataBase URL
+export const metadata: Metadata = {
+  ...baseMetadata,
+  metadataBase: new URL("https://livario.com.ng"),
+};
 
 export default function RootLayout({
   children,
