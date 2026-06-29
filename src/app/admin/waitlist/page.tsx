@@ -57,7 +57,7 @@ async function WaitlistTabContent({
   }
 
   return (
-    <div className="overflow-x-auto rounded-md border border-border bg-background shadow-sm">
+    <div className="w-full max-w-full overflow-hidden rounded-md border border-border bg-background shadow-sm">
       <Table>
         <TableHeader>
           <TableRow>
@@ -104,7 +104,7 @@ export default async function AdminWaitlistPage() {
   ];
 
   return (
-    <main className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:px-8">
+    <main className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:px-8 min-w-0 max-w-full">
       <div>
         <p className="text-sm font-medium text-muted-foreground">
           Platform administration
@@ -135,9 +135,9 @@ export default async function AdminWaitlistPage() {
         ))}
       </section>
 
-      <Tabs defaultValue="all" className="w-full">
+      <Tabs defaultValue="all" className="w-full min-w-0">
         {/* FIXED: Added a wrapper div to ensure the tabs header scrolls cleanly on small devices without stretching the parent viewport */}
-        <div className="w-full overflow-x-auto pb-1">
+        <div className="w-full max-w-full overflow-x-auto pb-1">
           <TabsList className="inline-flex w-full justify-start sm:w-auto">
             <TabsTrigger value="all" className="flex-1 sm:flex-none">
               All
@@ -150,13 +150,13 @@ export default async function AdminWaitlistPage() {
             </TabsTrigger>
           </TabsList>
         </div>
-        <TabsContent value="all" className="outline-none">
+        <TabsContent value="all" className="w-full min-w-0 outline-none">
           <WaitlistTabContent filter="all" label="All" />
         </TabsContent>
-        <TabsContent value="tenants" className="outline-none">
+        <TabsContent value="tenants" className="w-full min-w-0 outline-none">
           <WaitlistTabContent filter="tenant" label="Tenants" />
         </TabsContent>
-        <TabsContent value="landlords" className="outline-none">
+        <TabsContent value="landlords" className="w-full min-w-0 outline-none">
           <WaitlistTabContent filter="landlord" label="Landlords" />
         </TabsContent>
       </Tabs>
