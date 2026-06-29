@@ -57,8 +57,7 @@ async function WaitlistTabContent({
   }
 
   return (
-    /* FIXED: Changed overflow-hidden to overflow-x-auto so the table can scroll horizontally on mobile */
-    <div className="w-full overflow-x-auto rounded-md border border-border bg-background shadow-sm">
+    <div className="overflow-hidden rounded-md border border-border bg-background shadow-sm">
       <Table>
         <TableHeader>
           <TableRow>
@@ -71,11 +70,11 @@ async function WaitlistTabContent({
         <TableBody>
           {entries.map((entry) => (
             <TableRow key={entry.id}>
-              <TableCell className="font-medium whitespace-nowrap">
+              <TableCell className="font-medium">
                 {entry.full_name ?? "—"}
               </TableCell>
-              <TableCell className="whitespace-nowrap">{entry.email}</TableCell>
-              <TableCell className="whitespace-nowrap">
+              <TableCell>{entry.email}</TableCell>
+              <TableCell>
                 {entry.role === "landlord" ? (
                   <Badge className="bg-[#FDE8DF] text-[#C44D28] border-0">
                     Landlord
@@ -84,7 +83,7 @@ async function WaitlistTabContent({
                   <Badge variant="secondary">Tenant</Badge>
                 )}
               </TableCell>
-              <TableCell className="whitespace-nowrap">
+              <TableCell>
                 {dateFormatter.format(new Date(entry.created_at))}
               </TableCell>
             </TableRow>
@@ -118,7 +117,7 @@ export default async function AdminWaitlistPage() {
         </p>
       </div>
 
-      <section className="grid gap-4 grid-cols-1 sm:grid-cols-3">
+      <section className="grid gap-4 sm:grid-cols-3">
         {statCards.map((card) => (
           <Card key={card.label}>
             <CardHeader className="flex flex-row items-center justify-between gap-3 pb-2">
@@ -136,19 +135,19 @@ export default async function AdminWaitlistPage() {
         ))}
       </section>
 
-      <Tabs defaultValue="all" className="w-full">
-        <TabsList className="w-full justify-start overflow-x-auto sm:w-auto">
+      <Tabs defaultValue="all">
+        <TabsList>
           <TabsTrigger value="all">All</TabsTrigger>
           <TabsTrigger value="tenants">Tenants</TabsTrigger>
           <TabsTrigger value="landlords">Landlords</TabsTrigger>
         </TabsList>
-        <TabsContent value="all" className="mt-4">
+        <TabsContent value="all">
           <WaitlistTabContent filter="all" label="All" />
         </TabsContent>
-        <TabsContent value="tenants" className="mt-4">
+        <TabsContent value="tenants">
           <WaitlistTabContent filter="tenant" label="Tenants" />
         </TabsContent>
-        <TabsContent value="landlords" className="mt-4">
+        <TabsContent value="landlords">
           <WaitlistTabContent filter="landlord" label="Landlords" />
         </TabsContent>
       </Tabs>
