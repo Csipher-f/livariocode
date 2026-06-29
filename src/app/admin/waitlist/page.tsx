@@ -57,7 +57,8 @@ async function WaitlistTabContent({
   }
 
   return (
-    <div className="overflow-hidden rounded-md border border-border bg-background shadow-sm">
+    /* Strictly isolating horizontal scrolling to the table frame */
+    <div className="w-full overflow-x-auto rounded-md border border-border bg-background shadow-sm">
       <Table>
         <TableHeader>
           <TableRow>
@@ -70,11 +71,11 @@ async function WaitlistTabContent({
         <TableBody>
           {entries.map((entry) => (
             <TableRow key={entry.id}>
-              <TableCell className="font-medium">
+              <TableCell className="font-medium whitespace-nowrap">
                 {entry.full_name ?? "—"}
               </TableCell>
-              <TableCell>{entry.email}</TableCell>
-              <TableCell>
+              <TableCell className="whitespace-nowrap">{entry.email}</TableCell>
+              <TableCell className="whitespace-nowrap">
                 {entry.role === "landlord" ? (
                   <Badge className="bg-[#FDE8DF] text-[#C44D28] border-0">
                     Landlord
@@ -83,7 +84,7 @@ async function WaitlistTabContent({
                   <Badge variant="secondary">Tenant</Badge>
                 )}
               </TableCell>
-              <TableCell>
+              <TableCell className="whitespace-nowrap">
                 {dateFormatter.format(new Date(entry.created_at))}
               </TableCell>
             </TableRow>
@@ -104,8 +105,8 @@ export default async function AdminWaitlistPage() {
   ];
 
   return (
-    <main className="mx-auto grid w-full max-w-7xl gap-6 overflow-x-hidden px-4 py-8 sm:px-6 lg:px-8">
-      <div>
+    <main className="w-full px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mb-6">
         <p className="text-sm font-medium text-muted-foreground">
           Platform administration
         </p>
@@ -117,14 +118,15 @@ export default async function AdminWaitlistPage() {
         </p>
       </div>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      {/* The summary cards will now sit perfectly on a single screen without breaking */}
+      <section className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         {statCards.map((card) => (
-          <Card key={card.label}>
+          <Card key={card.label} className="w-full">
             <CardHeader className="flex flex-row items-center justify-between gap-3 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+              <CardTitle className="text-sm font-medium text-muted-foreground truncate">
                 {card.label}
               </CardTitle>
-              <Users2 className="size-4 text-muted-foreground" />
+              <Users2 className="size-4 shrink-0 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <p className="text-3xl font-semibold tracking-tight">
@@ -135,19 +137,21 @@ export default async function AdminWaitlistPage() {
         ))}
       </section>
 
-      <Tabs defaultValue="all">
-        <TabsList>
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="tenants">Tenants</TabsTrigger>
-          <TabsTrigger value="landlords">Landlords</TabsTrigger>
-        </TabsList>
-        <TabsContent value="all">
+      <Tabs defaultValue="all" className="w-full">
+        <div className="w-full overflow-x-auto mb-4">
+          <TabsList className="flex w-max justify-start">
+            <TabsTrigger value="all">All</TabsTrigger>
+            <TabsTrigger value="tenants">Tenants</TabsTrigger>
+            <TabsTrigger value="landlords">Landlords</TabsTrigger>
+          </TabsList>
+        </div>
+        <TabsContent value="all" className="w-full">
           <WaitlistTabContent filter="all" label="All" />
         </TabsContent>
-        <TabsContent value="tenants">
+        <TabsContent value="tenants" className="w-full">
           <WaitlistTabContent filter="tenant" label="Tenants" />
         </TabsContent>
-        <TabsContent value="landlords">
+        <TabsContent value="landlords" className="w-full">
           <WaitlistTabContent filter="landlord" label="Landlords" />
         </TabsContent>
       </Tabs>
