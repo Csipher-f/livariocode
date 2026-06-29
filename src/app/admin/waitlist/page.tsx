@@ -57,7 +57,6 @@ async function WaitlistTabContent({
   }
 
   return (
-    /* Mirroring the exact Table setup from your working properties page */
     <div className="overflow-x-auto rounded-md border border-border bg-background shadow-sm">
       <Table>
         <TableHeader>
@@ -105,7 +104,6 @@ export default async function AdminWaitlistPage() {
   ];
 
   return (
-    /* Matches properties main page structure exactly */
     <main className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:px-8">
       <div>
         <p className="text-sm font-medium text-muted-foreground">
@@ -119,7 +117,6 @@ export default async function AdminWaitlistPage() {
         </p>
       </div>
 
-      {/* grid-cols-1 forces stacking on mobile so cards stay perfectly on-screen */}
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {statCards.map((card) => (
           <Card key={card.label}>
@@ -138,13 +135,21 @@ export default async function AdminWaitlistPage() {
         ))}
       </section>
 
-      {/* Tabs configuration wrapping cleanly */}
       <Tabs defaultValue="all" className="w-full">
-        <TabsList className="mb-2">
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="tenants">Tenants</TabsTrigger>
-          <TabsTrigger value="landlords">Landlords</TabsTrigger>
-        </TabsList>
+        {/* FIXED: Added a wrapper div to ensure the tabs header scrolls cleanly on small devices without stretching the parent viewport */}
+        <div className="w-full overflow-x-auto pb-1">
+          <TabsList className="inline-flex w-full justify-start sm:w-auto">
+            <TabsTrigger value="all" className="flex-1 sm:flex-none">
+              All
+            </TabsTrigger>
+            <TabsTrigger value="tenants" className="flex-1 sm:flex-none">
+              Tenants
+            </TabsTrigger>
+            <TabsTrigger value="landlords" className="flex-1 sm:flex-none">
+              Landlords
+            </TabsTrigger>
+          </TabsList>
+        </div>
         <TabsContent value="all" className="outline-none">
           <WaitlistTabContent filter="all" label="All" />
         </TabsContent>
