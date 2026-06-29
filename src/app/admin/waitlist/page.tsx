@@ -57,15 +57,15 @@ async function WaitlistTabContent({
   }
 
   return (
-    /* Strictly isolating horizontal scrolling to the table frame */
-    <div className="w-full overflow-x-auto rounded-md border border-border bg-background shadow-sm">
+    /* Mirroring the exact Table setup from your working properties page */
+    <div className="overflow-x-auto rounded-md border border-border bg-background shadow-sm">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Joined</TableHead>
+            <TableHead className="whitespace-nowrap">Name</TableHead>
+            <TableHead className="whitespace-nowrap">Email</TableHead>
+            <TableHead className="whitespace-nowrap">Role</TableHead>
+            <TableHead className="whitespace-nowrap">Joined</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -105,8 +105,9 @@ export default async function AdminWaitlistPage() {
   ];
 
   return (
-    <main className="w-full px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mb-6">
+    /* Matches properties main page structure exactly */
+    <main className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:px-8">
+      <div>
         <p className="text-sm font-medium text-muted-foreground">
           Platform administration
         </p>
@@ -118,15 +119,15 @@ export default async function AdminWaitlistPage() {
         </p>
       </div>
 
-      {/* The summary cards will now sit perfectly on a single screen without breaking */}
-      <section className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      {/* grid-cols-1 forces stacking on mobile so cards stay perfectly on-screen */}
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {statCards.map((card) => (
-          <Card key={card.label} className="w-full">
+          <Card key={card.label}>
             <CardHeader className="flex flex-row items-center justify-between gap-3 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground truncate">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
                 {card.label}
               </CardTitle>
-              <Users2 className="size-4 shrink-0 text-muted-foreground" />
+              <Users2 className="size-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <p className="text-3xl font-semibold tracking-tight">
@@ -137,21 +138,20 @@ export default async function AdminWaitlistPage() {
         ))}
       </section>
 
+      {/* Tabs configuration wrapping cleanly */}
       <Tabs defaultValue="all" className="w-full">
-        <div className="w-full overflow-x-auto mb-4">
-          <TabsList className="flex w-max justify-start">
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="tenants">Tenants</TabsTrigger>
-            <TabsTrigger value="landlords">Landlords</TabsTrigger>
-          </TabsList>
-        </div>
-        <TabsContent value="all" className="w-full">
+        <TabsList className="mb-2">
+          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="tenants">Tenants</TabsTrigger>
+          <TabsTrigger value="landlords">Landlords</TabsTrigger>
+        </TabsList>
+        <TabsContent value="all" className="outline-none">
           <WaitlistTabContent filter="all" label="All" />
         </TabsContent>
-        <TabsContent value="tenants" className="w-full">
+        <TabsContent value="tenants" className="outline-none">
           <WaitlistTabContent filter="tenant" label="Tenants" />
         </TabsContent>
-        <TabsContent value="landlords" className="w-full">
+        <TabsContent value="landlords" className="outline-none">
           <WaitlistTabContent filter="landlord" label="Landlords" />
         </TabsContent>
       </Tabs>
